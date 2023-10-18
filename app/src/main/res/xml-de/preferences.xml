@@ -3,36 +3,33 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <!-- Bible Version Setting -->
     <PreferenceCategory
-        app:title="Bible Version"
+        app:title="Bibel Version"
         app:key="bible_version_category"
         app:iconSpaceReserved="false">
         <ListPreference
             app:key="bible_version"
-            app:title="Select Bible Version"
+            app:title="Wähle die Bibel Version"
             app:summary="%s"
-            app:defaultValue="NLT"
+            app:defaultValue="LUTH1545"
             app:entries="@array/bible_versions"
             app:entryValues="@array/bible_versions_values"
             app:iconSpaceReserved="false"
             />
     </PreferenceCategory>
 
-    <!-- Notifications Setting -->
     <PreferenceCategory
-        app:title="Notifications"
+        app:title="Benachrichtigungen"
         app:key="notifications_category"
         app:iconSpaceReserved="false">
 
         <SwitchPreferenceCompat
             app:key="enable_notifications"
-            app:title="Enable Daily Notifications"
-            app:summary="Receive daily Bible verses"
+            app:title="Aktiviere tägliche Benachrichtigungen"
+            app:summary="Erhalte täglich Bibelverse"
             app:defaultValue="false"
             app:iconSpaceReserved="false"
-             />
-        <!-- TODO: ADD Time Picker -->
+            />
     </PreferenceCategory>
 
 </PreferenceScreen>

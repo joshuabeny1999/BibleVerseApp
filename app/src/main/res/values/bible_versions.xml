@@ -1,20 +1,20 @@
 <resources>
     <string-array name="bible_versions">
-        <item>Hoffnung für Alle</item>
-        <item>Luther Bibel 1545</item>
-        <item>Neue Genfer Übersetzung</item>
-        <item>Schlachter 1951</item>
-        <item>Schlachter 2000</item>
-        <item>King James Version</item>
-        <item>New International Version</item>
-        <item>New American Standard Bible</item>
-        <item>New King James Version</item>
-        <item>Revised Standard Version</item>
-        <item>New Living Translation</item>
-        <item>Holman Christian Standard Bible</item>
-        <item>New Revised Standard Version Updated Edition</item>
-        <item>English Standard Version</item>
-        <!-- Add all other options here -->
+        <item>Hoffnung für Alle (DE)</item>
+        <item>Luther Bibel 1545 (DE)</item>
+        <item>Neue Genfer Übersetzung (DE)</item>
+        <item>Schlachter 1951 (DE)</item>
+        <item>Schlachter 2000 (DE)</item>
+        <item>King James Version (ENG)</item>
+        <item>New International Version (ENG)</item>
+        <item>New American Standard Bible (ENG)</item>
+        <item>New King James Version (ENG)</item>
+        <item>Revised Standard Version (ENG)</item>
+        <item>New Living Translation (ENG)</item>
+        <item>Holman Christian Standard Bible (ENG)</item>
+        <item>New Revised Standard Version Updated Edition (ENG)</item>
+        <item>English Standard Version (ENG)</item>
+
     </string-array>
     <string-array name="bible_versions_values">
         <item>HOF</item>
@@ -31,7 +31,5 @@
         <item>HCSB</item>
         <item>NRSVUE</item>
         <item>ESV</item>
-
-        <!-- Add values corresponding to the options above -->
     </string-array>
 </resources>

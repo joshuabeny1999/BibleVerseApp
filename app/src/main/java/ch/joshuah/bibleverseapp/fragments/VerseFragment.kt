@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.preference.PreferenceManager
 import ch.joshuah.bibleverseapp.R
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
@@ -20,7 +21,12 @@ class VerseFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        fetchAndDisplayBibleVerse()
+        val preferences = context?.let { PreferenceManager.getDefaultSharedPreferences(it) }
+        if (preferences != null) {
+            preferences.getString("bible_version", null)?.let {
+                fetchAndDisplayBibleVerse(it)
+            }
+        }
     }
 
     override fun onCreateView(
@@ -32,12 +38,13 @@ class VerseFragment : Fragment() {
     }
 
     @OptIn(DelicateCoroutinesApi::class)
-    private fun fetchAndDisplayBibleVerse() {
+    private fun fetchAndDisplayBibleVerse(version : String) {
         GlobalScope.launch(Dispatchers.IO) {
             // Debug log
             println("Fetching bible verse...")
+
             // Hier rufen wir den API-Dienst auf und holen den Bibelvers
-            val bibleVerse = bibleVerseApiService.fetchBibleVerse("LUTH1545")
+            val bibleVerse = bibleVerseApiService.fetchBibleVerse(version)
             // Debug log
             println("Fetched bible verse: $bibleVerse")
 
