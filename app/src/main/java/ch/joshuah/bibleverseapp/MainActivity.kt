@@ -1,43 +1,48 @@
 package ch.joshuah.bibleverseapp
 
-import BibleVerseApiService
 import android.os.Bundle
-import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import androidx.fragment.app.Fragment
+import ch.joshuah.bibleverseapp.fragments.CreditFragment
+import ch.joshuah.bibleverseapp.fragments.SettingFragment
+import ch.joshuah.bibleverseapp.fragments.VerseFragment
+import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class MainActivity : AppCompatActivity() {
-    private val bibleVerseApiService = BibleVerseApiService()
+
+    lateinit var bottomNav : BottomNavigationView
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
-        // Fetch bible ferse and replace text in TextView
-        fetchAndDisplayBibleVerse()
-    }
-
-    private fun fetchAndDisplayBibleVerse() {
-        GlobalScope.launch(Dispatchers.IO) {
-            // Debug log
-            println("Fetching bible verse...")
-            // Hier rufen wir den API-Dienst auf und holen den Bibelvers
-            val bibleVerse = bibleVerseApiService.fetchBibleVerse("LUTH1545")
-            // Debug log
-            println("Fetched bible verse: $bibleVerse")
-
-            // Den erhaltenen Bibelvers auf der UI anzeigen
-            withContext(Dispatchers.Main) {
-                bibleVerse?.let {
-                    // Angenommen, die TextView hat die ID "textViewBibleVerse" in deinem Layout
-                    // Dann kannst du den Bibelvers so anzeigen:
-                    findViewById<TextView>(R.id.textViewBibleVerse).text = bibleVerse.text
-                    findViewById<TextView>(R.id.textViewBibleVerseReference).text = bibleVerse.reference
+        loadFragment(VerseFragment())
+        bottomNav = findViewById(R.id.activity_main_bottomNav)
+        bottomNav.setOnItemSelectedListener {
+            when (it.itemId) {
+                R.id.home -> {
+                    loadFragment(VerseFragment())
+                    true
+                }
+                R.id.settings -> {
+                    loadFragment(SettingFragment())
+                    true
+                }
+                R.id.credits -> {
+                    loadFragment(CreditFragment())
+                    true
+                }
+                else -> {
+                    false
                 }
             }
         }
     }
+
+    private  fun loadFragment(fragment: Fragment){
+        val transaction = supportFragmentManager.beginTransaction()
+        transaction.replace(R.id.activity_main_container,fragment)
+        transaction.commit()
+    }
+
 }
