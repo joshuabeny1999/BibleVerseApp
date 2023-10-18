@@ -1,0 +1,37 @@
+<resources>
+    <string-array name="bible_versions">
+        <item>Hoffnung für Alle</item>
+        <item>Luther Bibel 1545</item>
+        <item>Neue Genfer Übersetzung</item>
+        <item>Schlachter 1951</item>
+        <item>Schlachter 2000</item>
+        <item>King James Version</item>
+        <item>New International Version</item>
+        <item>New American Standard Bible</item>
+        <item>New King James Version</item>
+        <item>Revised Standard Version</item>
+        <item>New Living Translation</item>
+        <item>Holman Christian Standard Bible</item>
+        <item>New Revised Standard Version Updated Edition</item>
+        <item>English Standard Version</item>
+        <!-- Add all other options here -->
+    </string-array>
+    <string-array name="bible_versions_values">
+        <item>HOF</item>
+        <item>LUTH1545</item>
+        <item>NGU-DE</item>
+        <item>SCH1951</item>
+        <item>SCH2000</item>
+        <item>KJV</item>
+        <item>NIV</item>
+        <item>NASB</item>
+        <item>NKJV</item>
+        <item>RSV</item>
+        <item>NLT</item>
+        <item>HCSB</item>
+        <item>NRSVUE</item>
+        <item>ESV</item>
+
+        <!-- Add values corresponding to the options above -->
+    </string-array>
+</resources>
