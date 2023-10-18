@@ -21,11 +21,18 @@ class VerseFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        val defaultVersion = context?.getString(R.string.preference_listPreference_bible_version_default_value)
+        println("defaultVersion: $defaultVersion")
         val preferences = context?.let { PreferenceManager.getDefaultSharedPreferences(it) }
         if (preferences != null) {
-            preferences.getString("bible_version", null)?.let {
+            preferences.getString("bible_version",
+                defaultVersion
+            )?.let {
                 fetchAndDisplayBibleVerse(it)
             }
+        } else {
+            if (defaultVersion != null)
+            fetchAndDisplayBibleVerse(defaultVersion)
         }
     }
 

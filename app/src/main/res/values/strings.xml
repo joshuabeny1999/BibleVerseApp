@@ -11,4 +11,10 @@
     <string name="fragment_credit_textViewVerseText">Powered by BibleGateway.com</string>
     <string name="fragment_credit_textViewThanksTitle">Special Thanks</string>
     <string name="fragment_credit_textViewThanksText">We extend our gratitude to BibleGateway.com for their generous provision of daily verses and unwavering commitment to sharing the Word of God.</string>
+    <string name="preference_category_bible_version_title">Bible Version</string>
+    <string name="preference_listPreference_bible_version_title">Select Bible Version</string>
+    <string name="preference_listPreference_bible_version_default_value">NLT</string>
+    <string name="preference_category_notifications_title">Notifications</string>
+    <string name="preference_switchPreference_enable_notifications_title">Enable Daily Notifications</string>
+    <string name="preference_switchPreference_enable_notifications_summary">Receive daily Bible verses</string>
 </resources>

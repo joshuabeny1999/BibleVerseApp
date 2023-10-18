@@ -1,0 +1,20 @@
+<resources>
+    <string name="app_name">Bibelvers-App</string>
+    <string name="menu_verse">Vers</string>
+    <string name="menu_settings">Einstellungen</string>
+    <string name="menu_credits">Impressum</string>
+    <string name="fragment_verse_loading_verse">Bibelvers wird geladen…</string>
+    <string name="fragment_verse_buttonShare">Teilen</string>
+    <string name="fragment_credit_textViewCreditText">App-Entwicklung durch <a href="https://joshuah.ch">Joshua Hürzeler</a></string>
+    <string name="fragment_credit_textViewCreditTitle">Impressum</string>
+    <string name="fragment_credit_textViewVerseTitle">Vers des Tages</string>
+    <string name="fragment_credit_textViewVerseText">Bereitgestellt von BibleGateway.com</string>
+    <string name="fragment_credit_textViewThanksTitle">Besonderer Dank</string>
+    <string name="fragment_credit_textViewThanksText">Wir danken BibleGateway.com herzlich für ihre grosszügige Bereitstellung täglicher Verse und ihr unermüdliches Engagement für die Verbreitung des Wortes Gottes.</string>
+    <string name="preference_category_bible_version_title">Bibelversion</string>
+    <string name="preference_listPreference_bible_version_title">Bibelversion auswählen</string>
+    <string name="preference_listPreference_bible_version_default_value">LUTH1545</string>
+    <string name="preference_category_notifications_title">Benachrichtigungen</string>
+    <string name="preference_switchPreference_enable_notifications_title">Tägliche Benachrichtigungen aktivieren</string>
+    <string name="preference_switchPreference_enable_notifications_summary">Tägliche Bibelverse erhalten</string>
+</resources>
