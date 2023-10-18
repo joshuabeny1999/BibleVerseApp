@@ -3,7 +3,12 @@
     <string name="menu_verse">Verse</string>
     <string name="menu_settings">Settings</string>
     <string name="menu_credits">Credits</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="fragment_verse_loading_verse">Loading bible verse...</string>
+    <string name="fragment_verse_loading_verse">Loading bible verse…</string>
+    <string name="fragment_verse_buttonShare">Share</string>
+    <string name="fragment_credit_textViewCreditText">App Development by <a href="https://joshuah.ch">Joshua Hürzeler</a></string>
+    <string name="fragment_credit_textViewCreditTitle">Credits</string>
+    <string name="fragment_credit_textViewVerseTitle">Verse of the Day</string>
+    <string name="fragment_credit_textViewVerseText">Powered by BibleGateway.com</string>
+    <string name="fragment_credit_textViewThanksTitle">Special Thanks</string>
+    <string name="fragment_credit_textViewThanksText">We extend our gratitude to BibleGateway.com for their generous provision of daily verses and unwavering commitment to sharing the Word of God.</string>
 </resources>

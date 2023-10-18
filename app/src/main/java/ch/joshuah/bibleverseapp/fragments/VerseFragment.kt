@@ -46,8 +46,10 @@ class VerseFragment : Fragment() {
                 bibleVerse?.let {
                     // Angenommen, die TextView hat die ID "textViewBibleVerse" in deinem Layout
                     // Dann kannst du den Bibelvers so anzeigen:
+                    val referenceAndVersion = "${bibleVerse.reference} (${bibleVerse.versionLong})"
                     view?.findViewById<TextView>(R.id.fragment_verse_textViewBibleVerse)?.text = bibleVerse.text
-                    view?.findViewById<TextView>(R.id.fragment_verse_textViewBibleVerseReference)?.text = bibleVerse.reference
+                    view?.findViewById<TextView>(R.id.fragment_verse_textViewBibleVerseReference)?.text = referenceAndVersion
+
                 }
             }
         }

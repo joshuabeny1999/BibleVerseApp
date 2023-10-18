@@ -37,7 +37,10 @@ class BibleVerseApiService {
         val votdObject = jsonObject.getJSONObject("votd")
         val text = HtmlCompat.fromHtml(votdObject.getString("text"), HtmlCompat.FROM_HTML_MODE_LEGACY).toString()
         val reference = votdObject.getString("display_ref")
+        val version = votdObject.getString("version_id")
+        val versionLong = votdObject.getString("version")
+        val link = votdObject.getString("permalink")
 
-        return BibleVerse(text, reference)
+        return BibleVerse(text, reference, version, versionLong, link)
     }
 }
