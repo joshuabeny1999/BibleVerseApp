@@ -1,6 +1,7 @@
 package ch.joshuah.bibleverseapp.fragments
 
 import BibleVerseApiService
+import android.content.Context
 import android .os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -9,64 +10,44 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.preference.PreferenceManager
 import ch.joshuah.bibleverseapp.R
-import kotlinx.coroutines.DelicateCoroutinesApi
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 class VerseFragment : Fragment() {
     private val bibleVerseApiService = BibleVerseApiService()
 
+    private lateinit var verseText: TextView
+    private lateinit var verseReference: TextView
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        val defaultVersion = context?.getString(R.string.preference_listPreference_bible_version_default_value)
-        println("defaultVersion: $defaultVersion")
-        val preferences = context?.let { PreferenceManager.getDefaultSharedPreferences(it) }
-        if (preferences != null) {
-            preferences.getString("bible_version",
-                defaultVersion
-            )?.let {
-                fetchAndDisplayBibleVerse(it)
-            }
-        } else {
-            if (defaultVersion != null)
-            fetchAndDisplayBibleVerse(defaultVersion)
-        }
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_verse, container, false)
     }
 
-    @OptIn(DelicateCoroutinesApi::class)
-    private fun fetchAndDisplayBibleVerse(version : String) {
-        GlobalScope.launch(Dispatchers.IO) {
-            // Debug log
-            println("Fetching bible verse...")
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        verseText = view.findViewById(R.id.fragment_verse_textViewBibleVerse)
+        verseReference = view.findViewById(R.id.fragment_verse_textViewBibleVerseReference)
 
-            // Hier rufen wir den API-Dienst auf und holen den Bibelvers
-            val bibleVerse = bibleVerseApiService.fetchBibleVerse(version)
-            // Debug log
-            println("Fetched bible verse: $bibleVerse")
+        fetchAndDisplayBibleVerse(getVersion(requireContext()))
+    }
 
-            // Den erhaltenen Bibelvers auf der UI anzeigen
-            withContext(Dispatchers.Main) {
-                bibleVerse?.let {
-                    // Angenommen, die TextView hat die ID "textViewBibleVerse" in deinem Layout
-                    // Dann kannst du den Bibelvers so anzeigen:
-                    val referenceAndVersion = "${bibleVerse.reference} (${bibleVerse.versionLong})"
-                    view?.findViewById<TextView>(R.id.fragment_verse_textViewBibleVerse)?.text = bibleVerse.text
-                    view?.findViewById<TextView>(R.id.fragment_verse_textViewBibleVerseReference)?.text = referenceAndVersion
-
-                }
+    private fun fetchAndDisplayBibleVerse(version: String) {
+        bibleVerseApiService.fetchBibleVerse(version) { bibleVerse ->
+            val referenceAndVersion = "${bibleVerse?.reference} (${bibleVerse?.versionLong})"
+            activity?.runOnUiThread {
+                verseText.text = bibleVerse?.text
+                verseReference.text = referenceAndVersion
+                // TODO: If no verse returned by API show error, maybe if no internet or so and nothing in store.
             }
         }
     }
-    companion object
+
+    private fun getVersion(context : Context) : String {
+        val defaultVersion = context.getString(R.string.preference_listPreference_bible_version_default_value)
+        val preferences = PreferenceManager.getDefaultSharedPreferences(context)
+        return preferences.getString("bible_version", defaultVersion) ?: defaultVersion
+    }
+
 }
