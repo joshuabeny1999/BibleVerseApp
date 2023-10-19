@@ -40,6 +40,7 @@ class VerseFragment : Fragment() {
                 verseText.text = bibleVerse?.text
                 verseReference.text = referenceAndVersion
                 // TODO: If no verse returned by API show error, maybe if no internet or so and nothing in store.
+                // TODO: UMLaute wie neue genfer übersetzung wird nich korrekt angezeigt
             }
         }
     }
