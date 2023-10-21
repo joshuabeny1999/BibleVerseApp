@@ -1,23 +1,20 @@
-
-
+import android.net.Uri
 import androidx.core.text.HtmlCompat
 import ch.joshuah.bibleverseapp.data.BibleVerse
 import ch.joshuah.bibleverseapp.data.VotdApiResponse
 import com.google.gson.Gson
-import okhttp3.OkHttpClient
-import okhttp3.Request
-import okhttp3.Call
-import okhttp3.Callback
-import okhttp3.Response
-
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.suspendCancellableCoroutine
+import okhttp3.*
 import java.io.IOException
-
+import java.util.Date
 
 class BibleVerseApiService {
     private val client = OkHttpClient()
     private val gson = Gson()
 
-    fun fetchBibleVerse(version: String, callback: (BibleVerse?) -> Unit){
+    suspend fun fetchBibleVerse(version: String): Flow<BibleVerse?> = flow {
         val apiUrl = "https://www.biblegateway.com/votd/get/?format=json&version=$version"
 
         val request = Request.Builder()
@@ -25,21 +22,33 @@ class BibleVerseApiService {
             .get()
             .build()
 
-        client.newCall(request).enqueue(object : Callback {
+        val response = try {
+            client.newCall(request).await()
+        } catch (e: IOException) {
+            null
+        }
+
+        if (response?.isSuccessful == true) {
+            val json = response.body?.string()
+            val bibleVerse = parseJsonToBibleVerse(json)
+            emit(bibleVerse)
+        } else {
+            emit(null)
+        }
+    }
+
+    private suspend fun Call.await(): Response = suspendCancellableCoroutine { continuation ->
+        enqueue(object : Callback {
             override fun onFailure(call: Call, e: IOException) {
-                callback(null)
+                continuation.resumeWith(Result.failure(e))
             }
 
             override fun onResponse(call: Call, response: Response) {
-                if (response.isSuccessful) {
-                    val json = response.body?.string()
-                    val bibleVerse = parseJsonToBibleVerse(json)
-                    callback(bibleVerse)
-                } else {
-                    callback(null)
-                }
+                continuation.resumeWith(Result.success(response))
             }
         })
+
+        continuation.invokeOnCancellation { cancel() }
     }
 
     private fun parseJsonToBibleVerse(json: String?): BibleVerse? {
@@ -56,10 +65,10 @@ class BibleVerseApiService {
             val text = HtmlCompat.fromHtml(votdApiResponse.votd.text, HtmlCompat.FROM_HTML_MODE_LEGACY).toString()
             val reference = votdApiResponse.votd.display_ref
             val version = votdApiResponse.votd.version_id
-            val versionLong = votdApiResponse.votd.version
+            val versionLong = HtmlCompat.fromHtml(votdApiResponse.votd.version, HtmlCompat.FROM_HTML_MODE_LEGACY).toString()
             val link = votdApiResponse.votd.permalink
 
-            return BibleVerse(text, reference, version, versionLong, link)
+            return BibleVerse(text, reference, version, versionLong, Uri.parse(link), Date())
         } catch (e: Exception) {
             e.printStackTrace()
             return null

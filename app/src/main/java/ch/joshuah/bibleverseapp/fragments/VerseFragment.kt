@@ -1,6 +1,5 @@
 package ch.joshuah.bibleverseapp.fragments
 
-import BibleVerseApiService
 import android.content.Context
 import android .os.Bundle
 import androidx.fragment.app.Fragment
@@ -8,16 +7,24 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.lifecycle.lifecycleScope
 import androidx.preference.PreferenceManager
 import ch.joshuah.bibleverseapp.R
+import ch.joshuah.bibleverseapp.repository.BibleVerseRepository
+import kotlinx.coroutines.launch
+import java.util.Date
 
 class VerseFragment : Fragment() {
-    private val bibleVerseApiService = BibleVerseApiService()
+    private lateinit var bibleVerseRepository: BibleVerseRepository
 
     private lateinit var verseText: TextView
     private lateinit var verseReference: TextView
 
 
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        bibleVerseRepository = BibleVerseRepository.getInstance(requireContext())
+    }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -34,14 +41,14 @@ class VerseFragment : Fragment() {
     }
 
     private fun fetchAndDisplayBibleVerse(version: String) {
-        bibleVerseApiService.fetchBibleVerse(version) { bibleVerse ->
-            val referenceAndVersion = "${bibleVerse?.reference} (${bibleVerse?.versionLong})"
-            activity?.runOnUiThread {
-                verseText.text = bibleVerse?.text
-                verseReference.text = referenceAndVersion
-                // TODO: If no verse returned by API show error, maybe if no internet or so and nothing in store.
-                // TODO: UMLaute wie neue genfer übersetzung wird nich korrekt angezeigt
-            }
+        lifecycleScope.launch {
+            bibleVerseRepository.getDailyBibleVerse(Date(), version)
+                .collect { bibleVerse ->
+                    val referenceAndVersion = "${bibleVerse?.reference} (${bibleVerse?.versionLong})"
+                    verseText.text = bibleVerse?.text
+                    verseReference.text = referenceAndVersion
+                    // TODO: If no verse returned by API show error, maybe if no internet or so and nothing in store.
+                }
         }
     }
 
