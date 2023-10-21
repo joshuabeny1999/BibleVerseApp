@@ -1,3 +1,5 @@
+package ch.joshuah.bibleverseapp.services
+
 import android.net.Uri
 import androidx.core.text.HtmlCompat
 import ch.joshuah.bibleverseapp.data.BibleVerse
@@ -14,7 +16,7 @@ class BibleVerseApiService {
     private val client = OkHttpClient()
     private val gson = Gson()
 
-    suspend fun fetchBibleVerse(version: String): Flow<BibleVerse?> = flow {
+    suspend fun fetchBibleVerse(version: String): Flow<Result<BibleVerse>> = flow {
         val apiUrl = "https://www.biblegateway.com/votd/get/?format=json&version=$version"
 
         val request = Request.Builder()
@@ -30,10 +32,15 @@ class BibleVerseApiService {
 
         if (response?.isSuccessful == true) {
             val json = response.body?.string()
-            val bibleVerse = parseJsonToBibleVerse(json)
-            emit(bibleVerse)
+            try {
+                emit(Result.success(parseJsonToBibleVerse(json)))
+            } catch (
+                e: IllegalArgumentException
+            ) {
+                emit(Result.failure(e))
+            }
         } else {
-            emit(null)
+            emit(Result.failure(Error("Error fetching Bible verse from the API")))
         }
     }
 
@@ -51,27 +58,22 @@ class BibleVerseApiService {
         continuation.invokeOnCancellation { cancel() }
     }
 
-    private fun parseJsonToBibleVerse(json: String?): BibleVerse? {
+    private fun parseJsonToBibleVerse(json: String?): BibleVerse {
         if (json.isNullOrEmpty()) {
             throw IllegalArgumentException("JSON is empty or null")
         }
-        try {
-            val votdApiResponse = gson.fromJson(json, VotdApiResponse::class.java)
+        val votdApiResponse = gson.fromJson(json, VotdApiResponse::class.java)
 
-            if (votdApiResponse.votd.text.isEmpty()) {
-                throw IllegalArgumentException("JSON does not contain a Bible verse")
-            }
-
-            val text = HtmlCompat.fromHtml(votdApiResponse.votd.text, HtmlCompat.FROM_HTML_MODE_LEGACY).toString()
-            val reference = votdApiResponse.votd.display_ref
-            val version = votdApiResponse.votd.version_id
-            val versionLong = HtmlCompat.fromHtml(votdApiResponse.votd.version, HtmlCompat.FROM_HTML_MODE_LEGACY).toString()
-            val link = votdApiResponse.votd.permalink
-
-            return BibleVerse(text, reference, version, versionLong, Uri.parse(link), Date())
-        } catch (e: Exception) {
-            e.printStackTrace()
-            return null
+        if (votdApiResponse.votd.text.isEmpty()) {
+            throw IllegalArgumentException("JSON does not contain a Bible verse")
         }
+
+        val text = HtmlCompat.fromHtml(votdApiResponse.votd.text, HtmlCompat.FROM_HTML_MODE_LEGACY).toString()
+        val reference = votdApiResponse.votd.display_ref
+        val version = votdApiResponse.votd.version_id
+        val versionLong = HtmlCompat.fromHtml(votdApiResponse.votd.version, HtmlCompat.FROM_HTML_MODE_LEGACY).toString()
+        val link = votdApiResponse.votd.permalink
+
+        return BibleVerse(text, reference, version, versionLong, Uri.parse(link), Date())
     }
 }

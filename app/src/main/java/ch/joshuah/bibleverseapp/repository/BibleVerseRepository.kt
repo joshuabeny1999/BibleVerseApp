@@ -1,15 +1,13 @@
 package ch.joshuah.bibleverseapp.repository
 
-import BibleVerseApiService
+import ch.joshuah.bibleverseapp.services.BibleVerseApiService
 import android.content.Context
 import androidx.room.Room
 import ch.joshuah.bibleverseapp.data.BibleVerse
 import ch.joshuah.bibleverseapp.data.storage.AppDatabase
 import ch.joshuah.bibleverseapp.data.storage.BibleVerseDao
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.withContext
 import java.util.Date
 
 class BibleVerseRepository(context: Context) {
@@ -40,17 +38,28 @@ class BibleVerseRepository(context: Context) {
         bibleVerseDao.delete(verse)
     }
 
-    fun getDailyBibleVerse(date: Date, version: String): Flow<BibleVerse?> = flow {
+    fun getDailyBibleVerse(date: Date, version: String): Flow<Result<BibleVerse>> = flow {
         val cachedVerse = getBibleVerseByDayAndVersion(date, version)
 
         if (cachedVerse != null) {
-            emit(cachedVerse)
+            emit(Result.success(cachedVerse))
         } else {
-            bibleVerseApiService.fetchBibleVerse(version).collect { apiVerse ->
-                if (apiVerse != null) {
-                    insertBibleVerse(apiVerse)
+            try {
+                bibleVerseApiService.fetchBibleVerse(version).collect { result ->
+                    if (result.isSuccess) {
+                        val apiVerse = result.getOrNull()
+                        if (apiVerse != null) {
+                            insertBibleVerse(apiVerse)
+                            emit(Result.success(apiVerse))
+                        } else {
+                            emit(Result.failure(Error("No Bible verse available from the API")))
+                        }
+                    } else if (result.isFailure) {
+                        emit(Result.failure(Error("Error fetching Bible verse from the API: ${result.exceptionOrNull()?.message}")))
+                    }
                 }
-                emit(apiVerse)
+            } catch (e: Exception) {
+                emit(Result.failure(Error("Error fetching Bible verse from the API: ${e.message}")))
             }
         }
     }

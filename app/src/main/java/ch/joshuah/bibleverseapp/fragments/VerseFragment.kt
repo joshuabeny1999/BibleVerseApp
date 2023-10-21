@@ -11,6 +11,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.preference.PreferenceManager
 import ch.joshuah.bibleverseapp.R
 import ch.joshuah.bibleverseapp.repository.BibleVerseRepository
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.launch
 import java.util.Date
 
@@ -42,13 +43,29 @@ class VerseFragment : Fragment() {
 
     private fun fetchAndDisplayBibleVerse(version: String) {
         lifecycleScope.launch {
-            bibleVerseRepository.getDailyBibleVerse(Date(), version)
-                .collect { bibleVerse ->
-                    val referenceAndVersion = "${bibleVerse?.reference} (${bibleVerse?.versionLong})"
-                    verseText.text = bibleVerse?.text
-                    verseReference.text = referenceAndVersion
-                    // TODO: If no verse returned by API show error, maybe if no internet or so and nothing in store.
-                }
+            try {
+                bibleVerseRepository.getDailyBibleVerse(Date(), version)
+                    .collect { result ->
+                        if (result.isSuccess) {
+                            val bibleVerse = result.getOrNull()
+                            if (bibleVerse != null) {
+                                val referenceAndVersion = "${bibleVerse.reference} (${bibleVerse.versionLong})"
+                                verseText.text = bibleVerse.text
+                                verseReference.text = referenceAndVersion
+                            } else {
+                                showNoVerseError()
+                            }
+                        } else {
+                            if (result.exceptionOrNull()?.message == "No Bible verse available from the API") {
+                                showNoVerseError()
+                            } else {
+                                showNetworkError()
+                            }
+                        }
+                    }
+            } catch (e: Exception) {
+                showNetworkError()
+            }
         }
     }
 
@@ -56,6 +73,14 @@ class VerseFragment : Fragment() {
         val defaultVersion = context.getString(R.string.preference_listPreference_bible_version_default_value)
         val preferences = PreferenceManager.getDefaultSharedPreferences(context)
         return preferences.getString("bible_version", defaultVersion) ?: defaultVersion
+    }
+
+    private fun showNoVerseError() {
+        Snackbar.make(verseText, "No Bible verse available.", Snackbar.LENGTH_LONG).show()
+    }
+
+    private fun showNetworkError() {
+        Snackbar.make(verseText, "Error loading Bible verse. Check your internet connection.", Snackbar.LENGTH_LONG).show()
     }
 
 }
