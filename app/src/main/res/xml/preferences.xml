@@ -16,6 +16,7 @@
             app:entries="@array/bible_versions"
             app:entryValues="@array/bible_versions_values"
             app:iconSpaceReserved="false"
+            app:singleLineTitle="false"
             />
     </PreferenceCategory>
 
@@ -31,8 +32,14 @@
             app:summary="@string/preference_switchPreference_enable_notifications_summary"
             app:defaultValue="false"
             app:iconSpaceReserved="false"
-             />
-        <!-- TODO: ADD Time Picker -->
+            app:singleLineTitle="false"
+            />
+
+        <ch.joshuah.bibleverseapp.preference.TimePickerPreference
+            android:layout="@layout/preference_time_picker_row"
+            android:selectable="true"
+            app:dependency="enable_notifications" />
+
     </PreferenceCategory>
 
 </PreferenceScreen>

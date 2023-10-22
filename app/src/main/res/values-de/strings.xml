@@ -20,4 +20,9 @@
     <string name="fragment_verse_error_no_verse">Kein Bibelvers verfügbar.</string>
     <string name="fragment_verse_error_no_internet">Fehler beim laden des Bibelvers. Prüfe deine Internetverbindung!</string>
     <string name="fragment_verse_share_chooser_title">Teile Bibelvers</string>
+    <string name="preference_notification_time_name">Benachrichtigungszeit</string>
+    <string name="preference_notification_time_description">Bitte beachten Sie, dass die Benachrichtigung möglicherweise nicht funktioniert, wenn die App auf einigen Huawei-, Xiaomi- und OnePlus-Geräten vom System beendet wird. Weitere Informationen finden Sie unter dontkillmyapp.com</string>
+    <string name="preference_notification_time_current_setting">%s</string>
+    <string name="notification_title">Täglicher Bibelvers</string>
+    <string name="notification_channel_name">Täglicher Bibelvers Kanal</string>
 </resources>
