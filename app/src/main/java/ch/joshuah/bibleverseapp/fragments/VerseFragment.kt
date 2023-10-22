@@ -1,15 +1,18 @@
 package ch.joshuah.bibleverseapp.fragments
 
 import android.content.Context
+import android.content.Intent
 import android .os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.TextView
 import androidx.lifecycle.lifecycleScope
 import androidx.preference.PreferenceManager
 import ch.joshuah.bibleverseapp.R
+import ch.joshuah.bibleverseapp.data.BibleVerse
 import ch.joshuah.bibleverseapp.repository.BibleVerseRepository
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.launch
@@ -20,6 +23,9 @@ class VerseFragment : Fragment() {
 
     private lateinit var verseText: TextView
     private lateinit var verseReference: TextView
+    private lateinit var shareButton: Button
+
+    private var bibleVerse : BibleVerse? = null
 
 
     override fun onAttach(context: Context) {
@@ -37,8 +43,27 @@ class VerseFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         verseText = view.findViewById(R.id.fragment_verse_textViewBibleVerse)
         verseReference = view.findViewById(R.id.fragment_verse_textViewBibleVerseReference)
+        shareButton = view.findViewById(R.id.fragment_verse_buttonShare)
 
         fetchAndDisplayBibleVerse(getVersion(requireContext()))
+
+        shareButton.setOnClickListener {
+            shareBibleVerse(requireContext())
+        }
+    }
+
+    private fun shareBibleVerse(context: Context) {
+        if (bibleVerse != null) {
+            val sendIntent = Intent().apply {
+                val referenceAndVersion = "${bibleVerse!!.reference} (${bibleVerse!!.versionLong})"
+                action = Intent.ACTION_SEND
+                putExtra(Intent.EXTRA_TEXT, "${bibleVerse!!.text} \n (${referenceAndVersion}) \n\n ${bibleVerse!!.link}")
+                type = "text/plain"
+            }
+
+            val shareIntent = Intent.createChooser(sendIntent, context.getString(R.string.fragment_verse_share_chooser_title))
+            startActivity(shareIntent)
+        }
     }
 
     private fun fetchAndDisplayBibleVerse(version: String) {
@@ -47,24 +72,25 @@ class VerseFragment : Fragment() {
                 bibleVerseRepository.getDailyBibleVerse(Date(), version)
                     .collect { result ->
                         if (result.isSuccess) {
-                            val bibleVerse = result.getOrNull()
-                            if (bibleVerse != null) {
-                                val referenceAndVersion = "${bibleVerse.reference} (${bibleVerse.versionLong})"
-                                verseText.text = bibleVerse.text
+                            val collectedBibleVerse = result.getOrNull()
+                            if (collectedBibleVerse != null) {
+                                 bibleVerse = collectedBibleVerse
+                                val referenceAndVersion = "${bibleVerse!!.reference} (${bibleVerse!!.versionLong})"
+                                verseText.text = bibleVerse!!.text
                                 verseReference.text = referenceAndVersion
                             } else {
-                                showNoVerseError()
+                                showNoVerseError(requireContext())
                             }
                         } else {
                             if (result.exceptionOrNull()?.message == "No Bible verse available from the API") {
-                                showNoVerseError()
+                                showNoVerseError(requireContext())
                             } else {
-                                showNetworkError()
+                                showNetworkError(requireContext())
                             }
                         }
                     }
             } catch (e: Exception) {
-                showNetworkError()
+                showNetworkError(requireContext())
             }
         }
     }
@@ -75,12 +101,12 @@ class VerseFragment : Fragment() {
         return preferences.getString("bible_version", defaultVersion) ?: defaultVersion
     }
 
-    private fun showNoVerseError() {
-        Snackbar.make(verseText, "No Bible verse available.", Snackbar.LENGTH_LONG).show()
+    private fun showNoVerseError(context : Context) {
+        Snackbar.make(verseText, context.getString(R.string.fragment_verse_error_no_verse), Snackbar.LENGTH_LONG).show()
     }
 
-    private fun showNetworkError() {
-        Snackbar.make(verseText, "Error loading Bible verse. Check your internet connection.", Snackbar.LENGTH_LONG).show()
+    private fun showNetworkError(context : Context) {
+        Snackbar.make(verseText, context.getString(R.string.fragment_verse_error_no_internet), Snackbar.LENGTH_LONG).show()
     }
 
 }

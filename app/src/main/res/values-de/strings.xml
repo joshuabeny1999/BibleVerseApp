@@ -17,4 +17,7 @@
     <string name="preference_category_notifications_title">Benachrichtigungen</string>
     <string name="preference_switchPreference_enable_notifications_title">Tägliche Benachrichtigungen aktivieren</string>
     <string name="preference_switchPreference_enable_notifications_summary">Tägliche Bibelverse erhalten</string>
+    <string name="fragment_verse_error_no_verse">Kein Bibelvers verfügbar.</string>
+    <string name="fragment_verse_error_no_internet">Fehler beim laden des Bibelvers. Prüfe deine Internetverbindung!</string>
+    <string name="fragment_verse_share_chooser_title">Teile Bibelvers</string>
 </resources>

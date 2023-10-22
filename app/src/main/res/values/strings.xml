@@ -5,6 +5,8 @@
     <string name="menu_credits">Credits</string>
     <string name="fragment_verse_loading_verse">Loading bible verse…</string>
     <string name="fragment_verse_buttonShare">Share</string>
+    <string name="fragment_verse_error_no_verse">No Bible verse available.</string>
+    <string name="fragment_verse_error_no_internet">Error loading Bible verse. Check your internet connection!</string>
     <string name="fragment_credit_textViewCreditText">App Development by <a href="https://joshuah.ch">Joshua Hürzeler</a></string>
     <string name="fragment_credit_textViewCreditTitle">Credits</string>
     <string name="fragment_credit_textViewVerseTitle">Verse of the Day</string>
@@ -17,4 +19,5 @@
     <string name="preference_category_notifications_title">Notifications</string>
     <string name="preference_switchPreference_enable_notifications_title">Enable Daily Notifications</string>
     <string name="preference_switchPreference_enable_notifications_summary">Receive daily Bible verses</string>
+    <string name="fragment_verse_share_chooser_title">Share Bible Verse</string>
 </resources>

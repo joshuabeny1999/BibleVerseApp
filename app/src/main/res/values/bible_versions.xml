@@ -2,7 +2,6 @@
     <string-array name="bible_versions">
         <item>Hoffnung für Alle (DE)</item>
         <item>Luther Bibel 1545 (DE)</item>
-        <item>Neue Genfer Übersetzung (DE)</item>
         <item>Schlachter 1951 (DE)</item>
         <item>Schlachter 2000 (DE)</item>
         <item>King James Version (ENG)</item>
@@ -19,7 +18,6 @@
     <string-array name="bible_versions_values">
         <item>HOF</item>
         <item>LUTH1545</item>
-        <item>NGU-DE</item>
         <item>SCH1951</item>
         <item>SCH2000</item>
         <item>KJV</item>
