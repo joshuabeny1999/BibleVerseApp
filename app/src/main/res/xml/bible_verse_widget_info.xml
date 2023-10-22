@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
+    android:description="@string/app_widget_description"
+    android:initialKeyguardLayout="@layout/bible_verse_widget"
+    android:initialLayout="@layout/bible_verse_widget"
+    android:minWidth="40dp"
+    android:minHeight="110dp"
+    android:previewImage="@drawable/appwidget_preview"
+    android:previewLayout="@layout/bible_verse_widget"
+    android:resizeMode="horizontal|vertical"
+    android:targetCellWidth="1"
+    android:targetCellHeight="2"
+    android:updatePeriodMillis="86400000"
+    android:widgetCategory="home_screen" />

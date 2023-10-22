@@ -25,4 +25,9 @@
     <string name="preference_notification_time_current_setting">%s</string>
     <string name="notification_title">Daily Bible Verse</string>
     <string name="notification_channel_name">Daily Bible Verse Channel</string>
+    <string name="add_widget">Add widget</string>
+    <string name="app_widget_description">This is an app widget description</string>
+    <string name="preference_category_widget_title">Widget</string>
+    <string name="preference_color_title">Choose Widget Text Color</string>
+    <string name="preference_color_summary">Choose Text color for widget</string>
 </resources>

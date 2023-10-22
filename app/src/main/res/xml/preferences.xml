@@ -43,4 +43,18 @@
 
     </PreferenceCategory>
 
+    <PreferenceCategory
+        app:title="@string/preference_category_widget_title"
+        app:key="bible_widget_category"
+        app:iconSpaceReserved="false">
+
+        <com.jaredrummler.android.colorpicker.ColorPreferenceCompat
+            android:defaultValue="@color/white"
+            android:key="widget_color"
+            android:summary="@string/preference_color_summary"
+            android:title="@string/preference_color_title"
+            app:iconSpaceReserved="false"/>
+    </PreferenceCategory>
+
+
 </PreferenceScreen>

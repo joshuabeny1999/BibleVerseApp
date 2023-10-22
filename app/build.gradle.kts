@@ -41,6 +41,9 @@ android {
     kotlinOptions {
         jvmTarget = "1.8"
     }
+    buildFeatures {
+        viewBinding = true
+    }
 }
 
 dependencies {
@@ -50,11 +53,13 @@ dependencies {
     implementation("androidx.appcompat:appcompat:1.6.1")
     implementation("com.google.android.material:material:1.9.0")
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
+    implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.4.0")
     implementation("androidx.fragment:fragment-ktx:1.6.1")
     implementation("androidx.preference:preference-ktx:1.2.1")
     implementation("com.google.code.gson:gson:2.10.1")
     implementation("com.squareup.okhttp3:okhttp:4.11.0")
     implementation("androidx.room:room-ktx:$room_version")
+    implementation("com.jaredrummler:colorpicker:1.1.0")
 
     ksp("androidx.room:room-compiler:$room_version")
 

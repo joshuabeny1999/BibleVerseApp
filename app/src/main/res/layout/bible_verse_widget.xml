@@ -1,0 +1,26 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp"
+    android:id="@+id/widget_verse"
+    android:clickable="true">
+
+                <TextView
+                    android:id="@+id/widget_verse_textViewBibleVerse"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/fragment_verse_loading_verse"
+                    android:textColor="@color/white"
+                    android:textSize="14sp"
+                    />
+
+    <TextView
+                    android:id="@+id/widget_verse_textViewBibleVerseReference"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text=""
+                    android:textSize="11sp"
+                     />
+</LinearLayout>
