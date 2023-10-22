@@ -36,6 +36,7 @@
             />
 
         <ch.joshuah.bibleverseapp.preference.TimePickerPreference
+            app:key="notifications_time"
             android:layout="@layout/preference_time_picker_row"
             android:selectable="true"
             app:dependency="enable_notifications" />

@@ -44,22 +44,18 @@ class BibleVerseRepository(context: Context) {
         if (cachedVerse != null) {
             emit(Result.success(cachedVerse))
         } else {
-            try {
-                bibleVerseApiService.fetchBibleVerse(version).collect { result ->
-                    if (result.isSuccess) {
-                        val apiVerse = result.getOrNull()
-                        if (apiVerse != null) {
-                            insertBibleVerse(apiVerse)
-                            emit(Result.success(apiVerse))
-                        } else {
-                            emit(Result.failure(Error("No Bible verse available from the API")))
-                        }
-                    } else if (result.isFailure) {
-                        emit(Result.failure(Error("Error fetching Bible verse from the API: ${result.exceptionOrNull()?.message}")))
+            bibleVerseApiService.fetchBibleVerse(version).collect { result ->
+                if (result.isSuccess) {
+                    val apiVerse = result.getOrNull()
+                    if (apiVerse != null) {
+                        insertBibleVerse(apiVerse)
+                        emit(Result.success(apiVerse))
+                    } else {
+                        emit(Result.failure(Error("No Bible verse available from the API")))
                     }
+                } else if (result.isFailure) {
+                    emit(Result.failure(Error("Error fetching Bible verse from the API: ${result.exceptionOrNull()?.message}")))
                 }
-            } catch (e: Exception) {
-                emit(Result.failure(Error("Error fetching Bible verse from the API: ${e.message}")))
             }
         }
     }
