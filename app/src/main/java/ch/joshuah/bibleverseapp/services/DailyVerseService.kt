@@ -31,7 +31,7 @@ class DailyVerseService {
             context,
             0,
             intent,
-            PendingIntent.FLAG_UPDATE_CURRENT
+            PendingIntent.FLAG_IMMUTABLE
         )
 
         alarmManager.setRepeating(
@@ -64,7 +64,7 @@ class DailyVerseService {
             context,
             0,
             intent,
-            PendingIntent.FLAG_NO_CREATE or PendingIntent.FLAG_IMMUTABLE
+            PendingIntent.FLAG_IMMUTABLE
         )
 
         if (pendingIntent != null) {
