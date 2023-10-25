@@ -21,19 +21,13 @@ class NotificationReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
         val channelId = intent.getStringExtra("channelId") ?: "defaultChannelId"
 
-        println("NOTIFICATION DEBUG: Received notification broadcast")
-        println("NOTIFICATION DEBUG: channel id is $channelId")
         val coroutineScope = CoroutineScope(Dispatchers.IO)
 
         coroutineScope.launch {
-            println("NOTIFICATION DEBUG: Fetching bible verse")
             val bibleVerse = fetchBibleVerse(context)
             if (bibleVerse != null) {
-                println("NOTIFICATION DEBUG: could fetch bible verse")
                 val referenceAndVersion = "${bibleVerse.reference} (${bibleVerse.versionLong})"
                 createNotification(context, "${bibleVerse.text}\n\n$referenceAndVersion", channelId)
-            } else {
-                println("NOTIFICATION DEBUG: could not fetch bible verse")
             }
         }
     }
@@ -46,8 +40,6 @@ class NotificationReceiver : BroadcastReceiver() {
                 .first { it.isSuccess }
                 result.getOrNull()
         } catch (e: Exception) {
-            println("NOTIFICATION DEBUG: Could not fetch bible verse CATCH")
-            println(e)
             null
         }
     }
@@ -55,8 +47,6 @@ class NotificationReceiver : BroadcastReceiver() {
 
 
     private fun createNotification(context: Context, bibleVerse: String, channelId: String) {
-        println("NOTIFICATION DEBUG: Creating notification")
-        println("NOTIFICATION DEBUG: bible verse is $bibleVerse")
         val notificationManager =
             context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 

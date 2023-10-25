@@ -6,11 +6,11 @@ import android.os.Build
 import android.os.Bundle
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
+import androidx.preference.ListPreference
 import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.PreferenceManager
 import androidx.preference.SwitchPreferenceCompat
 import ch.joshuah.bibleverseapp.R
-import ch.joshuah.bibleverseapp.preference.TimePickerPreference
 import ch.joshuah.bibleverseapp.services.DailyVerseService
 import ch.joshuah.bibleverseapp.widgets.BibleVerseWidget
 import com.jaredrummler.android.colorpicker.ColorPreferenceCompat
@@ -18,7 +18,7 @@ import com.jaredrummler.android.colorpicker.ColorPreferenceCompat
 
 class SettingFragment : PreferenceFragmentCompat() {
     private lateinit var notificationEnabledPref: SwitchPreferenceCompat
-    private lateinit var timePickerPreference: TimePickerPreference
+    private lateinit var bibleVersionPreference: ListPreference
     private lateinit var widgetColorPreference: ColorPreferenceCompat
     private lateinit var sharedPrefs: SharedPreferences
 
@@ -36,13 +36,12 @@ class SettingFragment : PreferenceFragmentCompat() {
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         setPreferencesFromResource(R.xml.preferences, rootKey)
         notificationEnabledPref = findPreference("enable_notifications")!!
-        timePickerPreference = findPreference("notifications_time")!!
         widgetColorPreference = findPreference("widget_color")!!
+        bibleVersionPreference = findPreference("bible_version")!!
 
         sharedPrefs = PreferenceManager.getDefaultSharedPreferences(requireContext())
 
         notificationEnabledPref.setOnPreferenceChangeListener { _, newValue ->
-            println("Notification enabled: $newValue")
             val enabled = newValue as Boolean
             if (enabled) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU){
@@ -57,6 +56,11 @@ class SettingFragment : PreferenceFragmentCompat() {
         }
 
         widgetColorPreference.setOnPreferenceChangeListener { _, _ ->
+            BibleVerseWidget.updateWidgets(requireContext())
+            true
+        }
+
+        bibleVersionPreference.setOnPreferenceChangeListener { _, _ ->
             BibleVerseWidget.updateWidgets(requireContext())
             true
         }
