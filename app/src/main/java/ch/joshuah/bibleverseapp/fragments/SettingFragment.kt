@@ -12,11 +12,14 @@ import androidx.preference.SwitchPreferenceCompat
 import ch.joshuah.bibleverseapp.R
 import ch.joshuah.bibleverseapp.preference.TimePickerPreference
 import ch.joshuah.bibleverseapp.services.DailyVerseService
+import ch.joshuah.bibleverseapp.widgets.BibleVerseWidget
+import com.jaredrummler.android.colorpicker.ColorPreferenceCompat
 
 
 class SettingFragment : PreferenceFragmentCompat() {
     private lateinit var notificationEnabledPref: SwitchPreferenceCompat
     private lateinit var timePickerPreference: TimePickerPreference
+    private lateinit var widgetColorPreference: ColorPreferenceCompat
     private lateinit var sharedPrefs: SharedPreferences
 
     private var dailyVerseService = DailyVerseService()
@@ -34,8 +37,7 @@ class SettingFragment : PreferenceFragmentCompat() {
         setPreferencesFromResource(R.xml.preferences, rootKey)
         notificationEnabledPref = findPreference("enable_notifications")!!
         timePickerPreference = findPreference("notifications_time")!!
-
-
+        widgetColorPreference = findPreference("widget_color")!!
 
         sharedPrefs = PreferenceManager.getDefaultSharedPreferences(requireContext())
 
@@ -51,6 +53,11 @@ class SettingFragment : PreferenceFragmentCompat() {
             } else {
                 dailyVerseService.cancelNotificationAlarm(requireContext())
             }
+            true
+        }
+
+        widgetColorPreference.setOnPreferenceChangeListener { _, _ ->
+            BibleVerseWidget.updateWidgets(requireContext())
             true
         }
     }

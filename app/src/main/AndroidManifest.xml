@@ -22,6 +22,7 @@
             android:exported="false">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <action android:name="ch.joshuah.bibleverseapp.UPDATE_WIDGETS" />
             </intent-filter>
 
             <meta-data

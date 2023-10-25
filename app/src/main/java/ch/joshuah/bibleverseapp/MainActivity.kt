@@ -1,11 +1,14 @@
 package ch.joshuah.bibleverseapp
 
+import android.appwidget.AppWidgetManager
+import android.content.ComponentName
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import ch.joshuah.bibleverseapp.fragments.CreditFragment
 import ch.joshuah.bibleverseapp.fragments.SettingFragment
 import ch.joshuah.bibleverseapp.fragments.VerseFragment
+import ch.joshuah.bibleverseapp.widgets.BibleVerseWidget
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class MainActivity : AppCompatActivity() {
@@ -16,6 +19,11 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        if (intent.action == "ch.joshuah.bibleverseapp.UPDATE_WIDGETS") {
+            BibleVerseWidget.updateWidgets(this)
+        }
+
         loadFragment(VerseFragment())
         bottomNav = findViewById(R.id.activity_main_bottomNav)
         bottomNav.setOnItemSelectedListener {
