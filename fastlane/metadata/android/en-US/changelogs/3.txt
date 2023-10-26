@@ -1,0 +1,1 @@
+Fixes crashing on some newer devices

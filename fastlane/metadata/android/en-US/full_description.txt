@@ -1,0 +1,7 @@
+The Bible Verse app offers daily inspirational Bible verses in different languages. With handy features like home screen widgets, notifications, and sharing, you can make your faith come alive and be inspired by God's Word every day.
+
+Powered by BibleGateway.com.
+
+The app is open-source and published on Github. I created it as part of my degree in the Mobile & GUI engineering module. 
+
+Link to the code: https://github.com/joshuabeny1999/BibleVerseApp

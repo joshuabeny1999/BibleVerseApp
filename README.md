@@ -2,6 +2,8 @@
 Die BibleVerseApp bietet täglich inspirierende Bibelverse in verschiedenen Sprachen. 
 Mit praktischen Funktionen wie Home-Screen-Widgets, Benachrichtigungen und Teilen können Sie Ihren Glauben lebendig gestalten und täglich von Gottes Wort inspiriert werden. 
 
+![Promotion](Readme_images/promotion_image_en.png)
+
 ## Wie erreicht das Projekt die erforderlichen Punktzahl fürs Testat
 | Feature                                               | Bewertung | Verwendet?                        | Wie? |
 |-------------------------------------------------------|--|----------------------------------|---|
@@ -27,18 +29,18 @@ Mindestpunktzahl: 13 Punkte
 
 ## Screenshots
 1. Startseite:
-   ![Home](screenshots/screenshot_home.png)
+   ![Home](Readme_images/screenshot_home.png)
 
 2. Einstellungsseite:
-  ![Settings](screenshots/screenshot_settings.png)
+  ![Settings](Readme_images/screenshot_settings.png)
 
 3. Impressumsseite:
-   ![Notifications](screenshots/screenshot_credits.png)
+   ![Notifications](Readme_images/screenshot_credits.png)
 
 4. Widget:
-   ![Widgets](screenshots/screenshot_widget.png)
+   ![Widgets](Readme_images/screenshot_widget.png)
 
 5. Notification:
-   ![Notification](screenshots/screenshot_notification.png)
+   ![Notification](Readme_images/screenshot_notification.png)
 
 
