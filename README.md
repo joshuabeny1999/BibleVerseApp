@@ -2,7 +2,8 @@
 Die BibleVerseApp bietet täglich inspirierende Bibelverse in verschiedenen Sprachen. 
 Mit praktischen Funktionen wie Home-Screen-Widgets, Benachrichtigungen und Teilen können Sie Ihren Glauben lebendig gestalten und täglich von Gottes Wort inspiriert werden. 
 
-<a href='https://play.google.com/store/apps/details?id=ch.joshuah.bibleverseapp&pcampaignid=pcampaignidMKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img width="250" alt='Jetzt bei Google Play' src='https://play.google.com/intl/de_ch/badges/static/images/badges/de_badge_web_generic.png'/></a> (Bald auch auf F-Droid!)
+[<img src="https://fdroid.gitlab.io/artwork/badge/get-it-on-de.png" alt="Jetzt bei F-Droid" height="80">](https://f-droid.org/packages/ch.joshuah.bibleverseapp)
+[<img height="80" alt='Jetzt bei Google Play' alt="Jetzt bei Google Play" src='https://play.google.com/intl/de_ch/badges/static/images/badges/de_badge_web_generic.png'/>](https://play.google.com/store/apps/details?id=ch.joshuah.bibleverseapp)
 ![Promotion](Readme_images/promotion_image_de.png)
 
 ## Wie erreicht das Projekt die erforderlichen Punktzahl fürs Testat
