@@ -28,21 +28,11 @@ Mit praktischen Funktionen wie Home-Screen-Widgets, Benachrichtigungen und Teile
 
 Mindestpunktzahl: 14 Punkte
 
-
 ## Screenshots
-1. Startseite:
-   ![Home](Readme_images/screenshot_home.png)
+| Startseite | Einstellungsseite | Impressumsseite |
+|:----------:|:-----------------:|:---------------:|
+| <img src="Readme_images/screenshot_home.png" width="250" /> | <img src="Readme_images/screenshot_settings.png" width="250" /> | <img src="Readme_images/screenshot_credits.png" width="250" /> |
 
-2. Einstellungsseite:
-  ![Settings](Readme_images/screenshot_settings.png)
-
-3. Impressumsseite:
-   ![Notifications](Readme_images/screenshot_credits.png)
-
-4. Widget:
-   ![Widgets](Readme_images/screenshot_widget.png)
-
-5. Notification:
-   ![Notification](Readme_images/screenshot_notification.png)
-
-
+| Widget | Notification |
+|:------:|:------------:|
+| <img src="Readme_images/screenshot_widget.png" width="250" /> | <img src="Readme_images/screenshot_notification.png" width="250" /> |
