@@ -24,7 +24,7 @@ Mit praktischen Funktionen wie Home-Screen-Widgets, Benachrichtigungen und Teile
 | Integration von Drittkomponenten (Libraries)          | 1 bis 3 Punkte |     ✅     | Einbindung ColorPicker Preferences von 3rd Party    |
 | Erstellung eines App Widgets (Home Screen)            | 1 bis 3 Punkte |     ✅     | Widget mit Bibelvers                                |
 | Unterstützung einer zusätzlichen Plattform            | 3 bis 5 Punkte |     ❌     |                                                     |
-| Deine eigenen Ideen                                   | 1 bis N Punkte |     ✅     |Veröffentlichung im PlayStore und auf Fdroid         | 
+| Deine eigenen Ideen                                   | 1 bis N Punkte |     ✅     |Veröffentlichung im PlayStore und auf Fdroid, fastlane cli für Sync Metadaten PlayStore und F-Droid konfiguriert         | 
 
 Mindestpunktzahl: 14 Punkte
 
