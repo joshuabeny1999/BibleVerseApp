@@ -6,7 +6,16 @@ Mit praktischen Funktionen wie Home-Screen-Widgets, Benachrichtigungen und Teile
 [<img height="80" alt='Jetzt bei Google Play' alt="Jetzt bei Google Play" src='https://play.google.com/intl/de_ch/badges/static/images/badges/de_badge_web_generic.png'/>](https://play.google.com/store/apps/details?id=ch.joshuah.bibleverseapp)
 ![Promotion](Readme_images/promotion_image_de.png)
 
-## Wie erreicht das Projekt die erforderlichen Punktzahl fürs Testat
+## Screenshots
+| Startseite | Einstellungsseite | Impressumsseite |
+|:----------:|:-----------------:|:---------------:|
+| <img src="Readme_images/screenshot_home.png" width="250" /> | <img src="Readme_images/screenshot_settings.png" width="250" /> | <img src="Readme_images/screenshot_credits.png" width="250" /> |
+
+| Widget | Notification |
+|:------:|:------------:|
+| <img src="Readme_images/screenshot_widget.png" width="250" /> | <img src="Readme_images/screenshot_notification.png" width="250" /> |
+
+## Wie hat das Projekt die erforderlichen Punktzahl fürs Testat erreicht?
 | Feature                                               | Bewertung      | Verwendet? | Wie?                                                 |
 |-------------------------------------------------------|----------------|------------|------------------------------------------------------|
 | Verwendung von Kotlin statt Java (pro Teammitglied)   | 3 Punkte       |     ✅     | Kotlin statt Java                                   |
@@ -27,12 +36,3 @@ Mit praktischen Funktionen wie Home-Screen-Widgets, Benachrichtigungen und Teile
 | Deine eigenen Ideen                                   | 1 bis N Punkte |     ✅     |Veröffentlichung im PlayStore und auf Fdroid, fastlane cli für Sync Metadaten PlayStore und F-Droid konfiguriert         | 
 
 Mindestpunktzahl: 14 Punkte
-
-## Screenshots
-| Startseite | Einstellungsseite | Impressumsseite |
-|:----------:|:-----------------:|:---------------:|
-| <img src="Readme_images/screenshot_home.png" width="250" /> | <img src="Readme_images/screenshot_settings.png" width="250" /> | <img src="Readme_images/screenshot_credits.png" width="250" /> |
-
-| Widget | Notification |
-|:------:|:------------:|
-| <img src="Readme_images/screenshot_widget.png" width="250" /> | <img src="Readme_images/screenshot_notification.png" width="250" /> |
