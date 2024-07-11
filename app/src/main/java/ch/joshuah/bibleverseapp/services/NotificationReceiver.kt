@@ -55,7 +55,7 @@ class NotificationReceiver : BroadcastReceiver() {
             context,
             0,
             resultIntent,
-            PendingIntent.FLAG_UPDATE_CURRENT
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
 
         val bigTextStyle = NotificationCompat.BigTextStyle()

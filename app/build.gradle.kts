@@ -6,13 +6,13 @@ plugins {
 
 android {
     namespace = "ch.joshuah.bibleverseapp"
-    compileSdk = 33
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "ch.joshuah.bibleverseapp"
         minSdk = 26
-        targetSdk = 33
-        versionCode = 3
+        targetSdk = 35
+        versionCode = 4
         versionName = "1.2"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
