@@ -2,6 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <!-- Berechtigungen -->
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <uses-permission android:name="android.permission.USE_EXACT_ALARM" />
@@ -17,12 +18,13 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:targetApi="31">
+
+        <!-- Definition für das Widget -->
         <receiver
             android:name=".widgets.BibleVerseWidget"
             android:exported="false">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
-                <action android:name="ch.joshuah.bibleverseapp.UPDATE_WIDGETS" />
             </intent-filter>
 
             <meta-data
@@ -30,17 +32,29 @@
                 android:resource="@xml/bible_verse_widget_info" />
         </receiver>
 
+        <!-- Receiver für Widget-Updates -->
+        <receiver
+            android:name=".widgets.WidgetUpdateReceiver"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+        </receiver>
+
+        <!-- Receiver für Benachrichtigungen -->
+        <receiver
+            android:name=".services.NotificationReceiver"
+            android:exported="false" />
+
+        <!-- Hauptaktivität -->
         <activity
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
 
-        <receiver android:name=".services.NotificationReceiver" />
     </application>
-
 </manifest>

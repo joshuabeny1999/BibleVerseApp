@@ -17,6 +17,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import java.util.Date
+import java.util.logging.Logger
 
 
 class BibleVerseWidget : AppWidgetProvider() {
@@ -42,6 +43,18 @@ class BibleVerseWidget : AppWidgetProvider() {
             intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, ids)
             context.sendBroadcast(intent)
         }
+    }
+    override fun onEnabled(context: Context) {
+        super.onEnabled(context)
+        // Start the alarm for widget updates
+        Logger.getLogger("BibleVerseWidget").info("Widget update enabled")
+        WidgetUpdateScheduler.setupWidgetUpdateAlarm(context)
+    }
+
+    override fun onDisabled(context: Context) {
+        super.onDisabled(context)
+        // Stop the alarm when no widgets are active
+        WidgetUpdateScheduler.cancelWidgetUpdateAlarm(context)
     }
     override fun onUpdate(
         context: Context,
