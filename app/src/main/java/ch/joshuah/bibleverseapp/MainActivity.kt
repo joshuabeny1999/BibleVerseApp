@@ -1,9 +1,10 @@
 package ch.joshuah.bibleverseapp
 
-import android.appwidget.AppWidgetManager
-import android.content.ComponentName
 import android.os.Bundle
+import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.Fragment
 import ch.joshuah.bibleverseapp.fragments.CreditFragment
 import ch.joshuah.bibleverseapp.fragments.SettingFragment
@@ -15,16 +16,26 @@ class MainActivity : AppCompatActivity() {
 
     lateinit var bottomNav : BottomNavigationView
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
+        enableEdgeToEdge()
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        // Handle window insets to prevent content from being behind system bars
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
+            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, 0)
+            insets
+        }
 
         if (intent.action == "ch.joshuah.bibleverseapp.UPDATE_WIDGETS") {
             BibleVerseWidget.updateWidgets(this)
         }
 
-        loadFragment(VerseFragment())
+        if (savedInstanceState == null) {
+            loadFragment(VerseFragment())
+        }
+
         bottomNav = findViewById(R.id.activity_main_bottomNav)
         bottomNav.setOnItemSelectedListener {
             when (it.itemId) {
@@ -47,10 +58,9 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private  fun loadFragment(fragment: Fragment){
+    private fun loadFragment(fragment: Fragment){
         val transaction = supportFragmentManager.beginTransaction()
-        transaction.replace(R.id.activity_main_container,fragment)
+        transaction.replace(R.id.activity_main_container, fragment)
         transaction.commit()
     }
-
 }
