@@ -33,4 +33,11 @@
     <string name="preference_category_appearance_title">Erscheinungsbild</string>
     <string name="preference_font_size_title">Schriftgrösse</string>
     <string name="preference_font_size_default_value">18</string>
+    <string name="preference_widget_font_size_title">Wähle Schriftgrösse des Widgets</string>
+
+    <!-- Font Size Entries -->
+    <string name="font_size_small">Klein</string>
+    <string name="font_size_medium">Mittel</string>
+    <string name="font_size_large">Gross</string>
+    <string name="font_size_extra_large">Sehr gross</string>
 </resources>

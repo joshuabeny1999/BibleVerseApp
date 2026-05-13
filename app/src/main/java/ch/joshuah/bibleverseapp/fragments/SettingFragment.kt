@@ -20,6 +20,7 @@ class SettingFragment : PreferenceFragmentCompat() {
     private lateinit var notificationEnabledPref: SwitchPreferenceCompat
     private lateinit var bibleVersionPreference: ListPreference
     private lateinit var widgetColorPreference: ColorPreferenceCompat
+    private lateinit var widgetFontSizePreference: ListPreference
     private lateinit var sharedPrefs: SharedPreferences
 
     private var dailyVerseService = DailyVerseService()
@@ -38,6 +39,7 @@ class SettingFragment : PreferenceFragmentCompat() {
         notificationEnabledPref = findPreference("enable_notifications")!!
         widgetColorPreference = findPreference("widget_color")!!
         bibleVersionPreference = findPreference("bible_version")!!
+        widgetFontSizePreference = findPreference("widget_font_size")!!
 
         sharedPrefs = PreferenceManager.getDefaultSharedPreferences(requireContext())
 
@@ -61,6 +63,11 @@ class SettingFragment : PreferenceFragmentCompat() {
         }
 
         bibleVersionPreference.setOnPreferenceChangeListener { _, _ ->
+            BibleVerseWidget.updateWidgets(requireContext())
+            true
+        }
+
+        widgetFontSizePreference.setOnPreferenceChangeListener { _, _ ->
             BibleVerseWidget.updateWidgets(requireContext())
             true
         }

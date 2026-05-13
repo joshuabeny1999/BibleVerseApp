@@ -71,6 +71,17 @@
             android:summary="@string/preference_color_summary"
             android:title="@string/preference_color_title"
             app:iconSpaceReserved="false"/>
+
+        <ListPreference
+            app:key="widget_font_size"
+            app:title="@string/preference_widget_font_size_title"
+            app:summary="%s"
+            app:defaultValue="@string/preference_font_size_default_value"
+            app:entries="@array/font_size_entries"
+            app:entryValues="@array/font_size_values"
+            app:iconSpaceReserved="false"
+            app:singleLineTitle="false"
+            />
     </PreferenceCategory>
 
 

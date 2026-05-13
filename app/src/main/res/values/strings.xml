@@ -33,4 +33,11 @@
     <string name="preference_category_appearance_title">Appearance</string>
     <string name="preference_font_size_title">Font Size</string>
     <string name="preference_font_size_default_value">18</string>
+    <string name="preference_widget_font_size_title">Choose Widget Font Size</string>
+    
+    <!-- Font Size Entries -->
+    <string name="font_size_small">Small</string>
+    <string name="font_size_medium">Medium</string>
+    <string name="font_size_large">Large</string>
+    <string name="font_size_extra_large">Extra Large</string>
 </resources>

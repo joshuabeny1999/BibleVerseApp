@@ -6,6 +6,7 @@ import android.appwidget.AppWidgetProvider
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
+import android.util.TypedValue
 import android.widget.RemoteViews
 import androidx.preference.PreferenceManager
 import ch.joshuah.bibleverseapp.MainActivity
@@ -26,8 +27,6 @@ class BibleVerseWidget : AppWidgetProvider() {
         fun updateWidgets(context: Context) {
             val intent = Intent(context.applicationContext, BibleVerseWidget::class.java)
             intent.action = AppWidgetManager.ACTION_APPWIDGET_UPDATE
-            // Use an array and EXTRA_APPWIDGET_IDS instead of AppWidgetManager.EXTRA_APPWIDGET_ID,
-            // since it seems the onUpdate() is only fired on that:
             // Use an array and EXTRA_APPWIDGET_IDS instead of AppWidgetManager.EXTRA_APPWIDGET_ID,
             // since it seems the onUpdate() is only fired on that:
             val widgetManager = AppWidgetManager.getInstance(context)
@@ -76,6 +75,8 @@ class BibleVerseWidget : AppWidgetProvider() {
 
         val preferences = PreferenceManager.getDefaultSharedPreferences(context)
         val textColor = preferences.getInt("widget_color", -1)
+        val fontSizeString = preferences.getString("widget_font_size", context.getString(R.string.preference_font_size_default_value))
+        val mainFontSize = fontSizeString?.toFloatOrNull() ?: 18f
 
 
         coroutineScope.launch {
@@ -92,6 +93,10 @@ class BibleVerseWidget : AppWidgetProvider() {
 
             views.setTextColor(R.id.widget_verse_textViewBibleVerse, textColor)
             views.setTextColor(R.id.widget_verse_textViewBibleVerseReference, textColor)
+
+            // Apply font sizes to the widget
+            views.setTextViewTextSize(R.id.widget_verse_textViewBibleVerse, TypedValue.COMPLEX_UNIT_SP, mainFontSize)
+            views.setTextViewTextSize(R.id.widget_verse_textViewBibleVerseReference, TypedValue.COMPLEX_UNIT_SP, mainFontSize * 0.8f)
 
             val intent = Intent(context, MainActivity::class.java)
             intent.action = "ch.joshuah.bibleverseapp.UPDATE_WIDGETS"
@@ -121,5 +126,3 @@ class BibleVerseWidget : AppWidgetProvider() {
         return preferences.getString("bible_version", defaultVersion) ?: defaultVersion
     }
 }
-
-
