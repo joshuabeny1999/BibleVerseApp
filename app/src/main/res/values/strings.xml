@@ -30,4 +30,7 @@
     <string name="preference_category_widget_title">Widget</string>
     <string name="preference_color_title">Choose Widget Text Color</string>
     <string name="preference_color_summary">Choose Text color for widget</string>
+    <string name="preference_category_appearance_title">Appearance</string>
+    <string name="preference_font_size_title">Font Size</string>
+    <string name="preference_font_size_default_value">18</string>
 </resources>

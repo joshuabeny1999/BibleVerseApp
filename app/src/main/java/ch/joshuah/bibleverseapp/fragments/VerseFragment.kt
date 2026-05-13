@@ -45,11 +45,24 @@ class VerseFragment : Fragment() {
         verseReference = view.findViewById(R.id.fragment_verse_textViewBibleVerseReference)
         shareButton = view.findViewById(R.id.fragment_verse_buttonShare)
 
+        applyFontSize()
         fetchAndDisplayBibleVerse(getVersion(requireContext()))
 
         shareButton.setOnClickListener {
             shareBibleVerse(requireContext())
         }
+    }
+
+    private fun applyFontSize() {
+        val preferences = PreferenceManager.getDefaultSharedPreferences(requireContext())
+        val fontSizeString = preferences.getString("font_size", getString(R.string.preference_font_size_default_value))
+        val mainFontSize = fontSizeString?.toFloatOrNull() ?: 18f
+        
+        // Apply main font size to the verse text
+        verseText.textSize = mainFontSize
+        
+        // Apply a proportional size to the reference (80% of main)
+        verseReference.textSize = mainFontSize * 0.8f
     }
 
     private fun shareBibleVerse(context: Context) {

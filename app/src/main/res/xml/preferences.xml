@@ -20,6 +20,23 @@
             />
     </PreferenceCategory>
 
+    <!-- Appearance Setting -->
+    <PreferenceCategory
+        app:title="@string/preference_category_appearance_title"
+        app:key="appearance_category"
+        app:iconSpaceReserved="false">
+        <ListPreference
+            app:key="font_size"
+            app:title="@string/preference_font_size_title"
+            app:summary="%s"
+            app:defaultValue="@string/preference_font_size_default_value"
+            app:entries="@array/font_size_entries"
+            app:entryValues="@array/font_size_values"
+            app:iconSpaceReserved="false"
+            app:singleLineTitle="false"
+            />
+    </PreferenceCategory>
+
     <!-- Notifications Setting -->
     <PreferenceCategory
         app:title="@string/preference_category_notifications_title"
