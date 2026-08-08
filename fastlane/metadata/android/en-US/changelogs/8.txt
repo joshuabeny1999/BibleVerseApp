@@ -1,0 +1,4 @@
+- New: Adjustable font size for Bible verses in both the app and the widget (Small to Extra Large).
+- Verse references now scale automatically with the selected text size.
+- Font size and color changes are now applied immediately to the widget.
+- Fixes in translation

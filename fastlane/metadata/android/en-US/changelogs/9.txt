@@ -1,0 +1,3 @@
+- Updated Target SDK to 37 (Android 17).
+- Added battery optimization info for notifications.
+- General improvements and bug fixes.

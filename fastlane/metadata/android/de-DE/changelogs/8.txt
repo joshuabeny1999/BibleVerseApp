@@ -1,0 +1,4 @@
+- Neu: Die Schriftgröße für Bibelverse kann jetzt in der App und im Widget angepasst werden (Klein bis Sehr gross).
+- Die Vers-Referenz skaliert nun automatisch mit der gewählten Textgrösse.
+- Änderungen an Schriftgrösse oder Farbe werden sofort im Widget übernommen.
+- Übersetzungsfehler behoben.

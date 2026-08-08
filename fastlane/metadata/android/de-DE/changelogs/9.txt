@@ -1,0 +1,3 @@
+- Ziel-SDK auf 37 (Android 17) aktualisiert.
+- Information zur Akkuoptimierung für Benachrichtigungen hinzugefügt.
+- Allgemeine Verbesserungen und Fehlerbehebungen.
