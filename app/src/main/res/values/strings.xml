@@ -18,10 +18,10 @@
     <string name="preference_listPreference_bible_version_default_value">NLT</string>
     <string name="preference_category_notifications_title">Notifications</string>
     <string name="preference_switchPreference_enable_notifications_title">Enable Daily Notifications</string>
-    <string name="preference_switchPreference_enable_notifications_summary">Receive daily Bible verses</string>
+    <string name="preference_switchPreference_enable_notifications_summary">Receive daily Bible verses (Time may vary slightly for battery optimization)</string>
     <string name="fragment_verse_share_chooser_title">Share Bible Verse</string>
     <string name="preference_notification_time_name">Notification Time</string>
-    <string name="preference_notification_time_description">Please note that the notification might not work when the app is killed by the system in some Huawei, Xiaomi and OnePlus devices. Refer to dontkillmyapp.com for more information</string>
+    <string name="preference_notification_time_description">Notifications are optimized for battery life and may arrive a few minutes after the scheduled time. Note that notifications might not work when the app is killed by the system on some devices (e.g., Huawei, Xiaomi, OnePlus).</string>
     <string name="preference_notification_time_current_setting">%s</string>
     <string name="notification_title">Daily Bible Verse</string>
     <string name="notification_channel_name">Daily Bible Verse Channel</string>
