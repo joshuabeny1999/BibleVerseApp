@@ -1,0 +1,1 @@
+Netzwerkprobleme behoben, die durch die Blockierung von Standard-User-Agents durch die CloudFront-WAF verursacht wurden.
