@@ -1,39 +1,46 @@
-# This file contains the fastlane.tools configuration
-# You can find the documentation at https://docs.fastlane.tools
-#
-# For a list of all available actions, check out
-#
-#     https://docs.fastlane.tools/actions
-#
-# For a list of all available plugins, check out
-#
-#     https://docs.fastlane.tools/plugins/available-plugins
-#
-
-# Uncomment the line if you want fastlane to automatically update itself
-# update_fastlane
-
 default_platform(:android)
 
 platform :android do
-  desc "Runs all the tests"
-  lane :test do
-    gradle(task: "test")
-  end
-
-  desc "Submit a new Beta Build to Crashlytics Beta"
-  lane :beta do
-    gradle(task: "clean assembleRelease")
-    crashlytics
-  
-    # sh "your_script.sh"
-    # You can also use other beta testing services here
-  end
-
-  desc "Deploy a new version to the Google Play"
+  desc "Update version in gradle, Build and deploy to Google Play Store"
   lane :deploy do
-    gradle(task: "clean bundleRelease")
-    upload_to_play_store
+    # 1. Automatically increment the versionCode
+    android_set_version_code(
+      gradle_file: "app/build.gradle.kts",
+      version_code: android_get_version_code(gradle_file: "app/build.gradle.kts").to_i + 1
+    )
+
+    # 2. Automatically bump the patch version (e.g. 1.8.0 -> 1.8.1)
+    current_version = android_get_version_name(gradle_file: "app/build.gradle.kts")
+    parts = current_version.split('.')
+    if parts.length == 2
+      parts << "1"
+    else
+      parts[-1] = (parts[-1].to_i + 1).to_s
+    end
+    new_version = parts.join('.')
+
+    android_set_version_name(
+      gradle_file: "app/build.gradle.kts",
+      version_name: new_version
+    )
+
+    # 3. Build the release App Bundle (.aab)
+    gradle(
+      task: "bundle",
+      build_type: "Release",
+      properties: {
+        "KEYSTORE_FILE" => "/Users/joshua/Documents/android_keystore.jks",
+        "KEYSTORE_PASSWORD" => ENV["KEYSTORE_PASSWORD"],
+        "KEY_ALIAS" => "bibleverseappkey",
+        "KEY_PASSWORD" => ENV["KEY_PASSWORD"]
+      }
+    )
+
+    # 4. Upload to Play Store
+    upload_to_play_store(
+      track: 'production',
+      aab: "app/build/outputs/bundle/release/app-release.aab",
+      skip_upload_apk: true
+    )
   end
 end
-

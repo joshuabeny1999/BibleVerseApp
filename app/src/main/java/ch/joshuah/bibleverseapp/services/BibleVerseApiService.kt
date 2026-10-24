@@ -21,6 +21,7 @@ class BibleVerseApiService {
 
         val request = Request.Builder()
             .url(apiUrl)
+            .addHeader("User-Agent", "BibleVerseApp (Android)")
             .get()
             .build()
 

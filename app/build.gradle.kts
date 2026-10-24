@@ -12,8 +12,8 @@ android {
         applicationId = "ch.joshuah.bibleverseapp"
         minSdk = 26
         targetSdk = 37
-        versionCode = 9
-        versionName = "1.8"
+        versionCode = 13
+        versionName = "1.8.3"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }

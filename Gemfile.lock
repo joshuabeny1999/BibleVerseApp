@@ -37,7 +37,7 @@ GEM
     dotenv (2.8.1)
     emoji_regex (3.2.3)
     excon (0.104.0)
-    faraday (1.10.3)
+    faraday (1.10.6)
       faraday-em_http (~> 1.0)
       faraday-em_synchrony (~> 1.0)
       faraday-excon (~> 1.1)
@@ -56,13 +56,13 @@ GEM
     faraday-em_synchrony (1.0.0)
     faraday-excon (1.1.0)
     faraday-httpclient (1.0.1)
-    faraday-multipart (1.0.4)
-      multipart-post (~> 2)
+    faraday-multipart (1.2.0)
+      multipart-post (~> 2.0)
     faraday-net_http (1.0.1)
     faraday-net_http_persistent (1.2.0)
     faraday-patron (1.0.0)
     faraday-rack (1.0.0)
-    faraday-retry (1.0.3)
+    faraday-retry (1.0.4)
     faraday_middleware (1.2.0)
       faraday (~> 1.0)
     fastimage (2.2.7)
@@ -106,6 +106,10 @@ GEM
       xcodeproj (>= 1.13.0, < 2.0.0)
       xcpretty (~> 0.3.0)
       xcpretty-travis-formatter (>= 0.0.3)
+    fastlane-plugin-increment_version_code (0.4.3)
+    fastlane-plugin-increment_version_name (0.0.10)
+    fastlane-plugin-versioning (0.7.1)
+    fastlane-plugin-versioning_android (0.1.1)
     gh_inspector (1.1.3)
     google-apis-androidpublisher_v3 (0.51.0)
       google-apis-core (>= 0.11.0, < 2.a)
@@ -191,6 +195,7 @@ GEM
     uber (0.1.0)
     unf (0.1.4)
       unf_ext
+    unf_ext (0.0.8.2)
     unf_ext (0.0.8.2-x64-mingw-ucrt)
     unicode-display_width (2.5.0)
     webrick (1.8.1)
@@ -208,10 +213,15 @@ GEM
       xcpretty (~> 0.2, >= 0.0.7)
 
 PLATFORMS
+  arm64-darwin-25
   x64-mingw-ucrt
 
 DEPENDENCIES
   fastlane
+  fastlane-plugin-increment_version_code
+  fastlane-plugin-increment_version_name
+  fastlane-plugin-versioning
+  fastlane-plugin-versioning_android
 
 BUNDLED WITH
    2.4.21

@@ -16,3 +16,4 @@ local.properties
 
 # Release artifacts
 /app/release/
+fastlane/.env
