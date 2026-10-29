@@ -19,15 +19,17 @@ import java.util.Date
 
 class NotificationReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
-        val channelId = intent.getStringExtra("channelId") ?: "defaultChannelId"
+        val pendingResult = goAsync()
 
-        val coroutineScope = CoroutineScope(Dispatchers.IO)
-
-        coroutineScope.launch {
-            val bibleVerse = fetchBibleVerse(context)
-            if (bibleVerse != null) {
-                val referenceAndVersion = "${bibleVerse.reference} (${bibleVerse.versionLong})"
-                createNotification(context, "${bibleVerse.text}\n\n$referenceAndVersion", channelId)
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                val bibleVerse = fetchBibleVerse(context)
+                if (bibleVerse != null) {
+                    val referenceAndVersion = "${bibleVerse.reference} (${bibleVerse.versionLong})"
+                    createNotification(context, "${bibleVerse.text}\n\n$referenceAndVersion")
+                }
+            } finally {
+                pendingResult.finish()
             }
         }
     }
@@ -38,15 +40,14 @@ class NotificationReceiver : BroadcastReceiver() {
         return try {
             val result = bibleVerseRepository.getDailyBibleVerse(Date(), getVersion(context))
                 .first { it.isSuccess }
-                result.getOrNull()
+            result.getOrNull()
         } catch (e: Exception) {
             null
         }
     }
 
-
-
-    private fun createNotification(context: Context, bibleVerse: String, channelId: String) {
+    private fun createNotification(context: Context, bibleVerse: String) {
+        val channelId = DailyVerseService.createNotificationChannel(context)
         val notificationManager =
             context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
@@ -73,10 +74,9 @@ class NotificationReceiver : BroadcastReceiver() {
         notificationManager.notify(notificationId, notificationBuilder.build())
     }
 
-    private fun getVersion(context : Context) : String {
+    private fun getVersion(context: Context): String {
         val defaultVersion = context.getString(R.string.preference_listPreference_bible_version_default_value)
         val preferences = PreferenceManager.getDefaultSharedPreferences(context)
         return preferences.getString("bible_version", defaultVersion) ?: defaultVersion
     }
-
 }
