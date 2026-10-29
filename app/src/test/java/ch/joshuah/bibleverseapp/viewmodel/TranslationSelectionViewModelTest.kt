@@ -17,6 +17,8 @@ import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import org.mockito.kotlin.anyOrNull
+import org.mockito.kotlin.eq
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
@@ -64,52 +66,54 @@ class TranslationSelectionViewModelTest {
     }
 
     @Test
-    fun loadVersions_setsDefaultLanguageMatchingLocaleAndExtractsLanguages() = runTest {
-        val germanVersion = createVersion(1, "Luther Bibel", "LUT", "de")
-        val englishVersion = createVersion(2, "King James Version", "KJV", "en")
-        val frenchVersion = createVersion(3, "Louis Segond", "LSG", "fr")
+    fun loadVersions_setsDefaultLanguageMatchingLocaleAndLoadsTranslations() = runTest {
+        val germanVersion = createVersion(1, "Luther Bibel", "LUT", "deu")
 
         val paginated = mock<PaginatedResponse<BibleVersion>>()
-        whenever(paginated.data).thenReturn(listOf(germanVersion, englishVersion, frenchVersion))
-        whenever(biblesApi.versions()).thenReturn(paginated)
+        whenever(paginated.data).thenReturn(listOf(germanVersion))
+        whenever(biblesApi.versions(eq("deu"), anyOrNull(), eq(50), anyOrNull())).thenReturn(paginated)
 
         val viewModel = TranslationSelectionViewModel(
             biblesApi = biblesApi,
             sharedPreferences = sharedPreferences,
-            defaultLanguageCode = "de"
+            defaultLanguageInput = "de"
         )
 
         testDispatcher.scheduler.advanceUntilIdle()
 
-        assertEquals("de", viewModel.selectedLanguage.value)
-        assertEquals(listOf("de", "en", "fr"), viewModel.availableLanguages.value)
+        assertEquals("deu", viewModel.selectedLanguage.value)
         assertEquals(1, viewModel.filteredTranslations.value.size)
         assertEquals(germanVersion, viewModel.filteredTranslations.value[0])
     }
 
     @Test
     fun selectLanguage_filtersTranslationsBySelectedLanguage() = runTest {
-        val germanVersion1 = createVersion(1, "Luther Bibel 1545", "LUTH1545", "de")
-        val germanVersion2 = createVersion(2, "Schlachter 2000", "SCH2000", "de-DE")
-        val englishVersion = createVersion(3, "New International Version", "NIV", "en")
+        val germanVersion = createVersion(1, "Luther Bibel", "LUT", "deu")
+        val englishVersion = createVersion(2, "New International Version", "NIV", "eng")
 
-        val paginated = mock<PaginatedResponse<BibleVersion>>()
-        whenever(paginated.data).thenReturn(listOf(germanVersion1, germanVersion2, englishVersion))
-        whenever(biblesApi.versions()).thenReturn(paginated)
+        val germanPaginated = mock<PaginatedResponse<BibleVersion>>()
+        whenever(germanPaginated.data).thenReturn(listOf(germanVersion))
+        whenever(biblesApi.versions(eq("deu"), anyOrNull(), eq(50), anyOrNull())).thenReturn(germanPaginated)
+
+        val englishPaginated = mock<PaginatedResponse<BibleVersion>>()
+        whenever(englishPaginated.data).thenReturn(listOf(englishVersion))
+        whenever(biblesApi.versions(eq("eng"), anyOrNull(), eq(50), anyOrNull())).thenReturn(englishPaginated)
 
         val viewModel = TranslationSelectionViewModel(
             biblesApi = biblesApi,
             sharedPreferences = sharedPreferences,
-            defaultLanguageCode = "de"
+            defaultLanguageInput = "de"
         )
 
         testDispatcher.scheduler.advanceUntilIdle()
 
-        assertEquals(2, viewModel.filteredTranslations.value.size)
+        assertEquals("deu", viewModel.selectedLanguage.value)
+        assertEquals(1, viewModel.filteredTranslations.value.size)
 
-        viewModel.selectLanguage("en")
+        viewModel.selectLanguage("eng")
+        testDispatcher.scheduler.advanceUntilIdle()
 
-        assertEquals("en", viewModel.selectedLanguage.value)
+        assertEquals("eng", viewModel.selectedLanguage.value)
         assertEquals(1, viewModel.filteredTranslations.value.size)
         assertEquals(englishVersion, viewModel.filteredTranslations.value[0])
     }
@@ -118,12 +122,12 @@ class TranslationSelectionViewModelTest {
     fun selectTranslation_savesTranslationIdToSharedPreferences() = runTest {
         val paginated = mock<PaginatedResponse<BibleVersion>>()
         whenever(paginated.data).thenReturn(emptyList())
-        whenever(biblesApi.versions()).thenReturn(paginated)
+        whenever(biblesApi.versions(anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull())).thenReturn(paginated)
 
         val viewModel = TranslationSelectionViewModel(
             biblesApi = biblesApi,
             sharedPreferences = sharedPreferences,
-            defaultLanguageCode = "en"
+            defaultLanguageInput = "eng"
         )
 
         testDispatcher.scheduler.advanceUntilIdle()
@@ -137,42 +141,45 @@ class TranslationSelectionViewModelTest {
     }
 
     @Test
-    fun loadVersions_whenDefaultLanguageNotFound_fallsBackToFirstLanguage() = runTest {
-        val germanVersion = createVersion(1, "Luther Bibel", "LUT", "de")
-        val englishVersion = createVersion(2, "King James Version", "KJV", "en")
-
-        val paginated = mock<PaginatedResponse<BibleVersion>>()
-        whenever(paginated.data).thenReturn(listOf(germanVersion, englishVersion))
-        whenever(biblesApi.versions()).thenReturn(paginated)
-
-        val viewModel = TranslationSelectionViewModel(
-            biblesApi = biblesApi,
-            sharedPreferences = sharedPreferences,
-            defaultLanguageCode = "es" // Spanish not present
-        )
-
-        testDispatcher.scheduler.advanceUntilIdle()
-
-        assertEquals("de", viewModel.selectedLanguage.value)
-        assertEquals(1, viewModel.filteredTranslations.value.size)
-        assertEquals(germanVersion, viewModel.filteredTranslations.value[0])
-    }
-
-    @Test
     fun init_loadsSavedTranslationIdFromSharedPreferences() = runTest {
         whenever(sharedPreferences.getString(TranslationSelectionViewModel.PREF_KEY_BIBLE_VERSION, null)).thenReturn("314")
         val paginated = mock<PaginatedResponse<BibleVersion>>()
         whenever(paginated.data).thenReturn(emptyList())
-        whenever(biblesApi.versions()).thenReturn(paginated)
+        whenever(biblesApi.versions(anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull())).thenReturn(paginated)
 
         val viewModel = TranslationSelectionViewModel(
             biblesApi = biblesApi,
             sharedPreferences = sharedPreferences,
-            defaultLanguageCode = "en"
+            defaultLanguageInput = "eng"
         )
 
         testDispatcher.scheduler.advanceUntilIdle()
 
         assertEquals("314", viewModel.selectedTranslationId.value)
+    }
+
+    @Test
+    fun loadVersions_fallsBackToFetchingAllVersionsWhenLanguageSpecificReturnsEmpty() = runTest {
+        val emptyPaginated = mock<PaginatedResponse<BibleVersion>>()
+        whenever(emptyPaginated.data).thenReturn(emptyList())
+        whenever(biblesApi.versions(eq("deu"), anyOrNull(), eq(50), anyOrNull())).thenReturn(emptyPaginated)
+        whenever(biblesApi.versions(eq("de"), anyOrNull(), eq(50), anyOrNull())).thenReturn(emptyPaginated)
+
+        val germanVersion = createVersion(1, "Luther Bibel", "LUT", "de-DE")
+        val allPaginated = mock<PaginatedResponse<BibleVersion>>()
+        whenever(allPaginated.data).thenReturn(listOf(germanVersion))
+        whenever(biblesApi.versions(eq(null), anyOrNull(), eq(99), anyOrNull())).thenReturn(allPaginated)
+
+        val viewModel = TranslationSelectionViewModel(
+            biblesApi = biblesApi,
+            sharedPreferences = sharedPreferences,
+            defaultLanguageInput = "de"
+        )
+
+        testDispatcher.scheduler.advanceUntilIdle()
+
+        assertEquals("deu", viewModel.selectedLanguage.value)
+        assertEquals(1, viewModel.filteredTranslations.value.size)
+        assertEquals(germanVersion, viewModel.filteredTranslations.value[0])
     }
 }

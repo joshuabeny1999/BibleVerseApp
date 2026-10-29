@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.lifecycle.lifecycleScope
 import androidx.preference.PreferenceManager
@@ -23,10 +24,11 @@ import java.util.Date
 class VerseFragment : Fragment() {
     private lateinit var bibleVerseRepository: BibleVerseRepository
 
+    private lateinit var layoutRoot: LinearLayout
+    private lateinit var cardImage: View
     private lateinit var verseText: TextView
     private lateinit var verseReference: TextView
     private lateinit var imageViewArtwork: ImageView
-    private lateinit var textViewAttribution: TextView
     private lateinit var shareButton: Button
 
     private var bibleVerse: BibleVerse? = null
@@ -45,17 +47,30 @@ class VerseFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        layoutRoot = view.findViewById(R.id.fragment_verse_layoutRoot)
+        cardImage = view.findViewById(R.id.card_image)
         verseText = view.findViewById(R.id.fragment_verse_textViewBibleVerse)
         verseReference = view.findViewById(R.id.fragment_verse_textViewBibleVerseReference)
         imageViewArtwork = view.findViewById(R.id.fragment_verse_imageViewArtwork)
-        textViewAttribution = view.findViewById(R.id.fragment_verse_textViewAttribution)
         shareButton = view.findViewById(R.id.fragment_verse_buttonShare)
 
         applyFontSize()
+        updateCardPosition(hasImage = false)
         fetchAndDisplayBibleVerse(getVersion(requireContext()))
 
         shareButton.setOnClickListener {
             shareBibleVerse(requireContext())
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        applyFontSize()
+        val currentVersion = getVersion(requireContext())
+        if (bibleVerse == null || bibleVerse?.version != currentVersion) {
+            fetchAndDisplayBibleVerse(currentVersion)
+        } else {
+            bibleVerse?.let { displayVerseArtwork(it) }
         }
     }
 
@@ -117,33 +132,38 @@ class VerseFragment : Fragment() {
     }
 
     private fun displayVerseArtwork(verse: BibleVerse) {
+        val preferences = PreferenceManager.getDefaultSharedPreferences(requireContext())
+        val showVerseImage = preferences.getBoolean("show_verse_image", true)
         val imageUrl = verse.imageUrl
-        val attribution = verse.attribution
 
-        if (!imageUrl.isNullOrBlank()) {
+        if (showVerseImage && !imageUrl.isNullOrBlank()) {
+            cardImage.visibility = View.VISIBLE
+            imageViewArtwork.visibility = View.VISIBLE
+            updateCardPosition(hasImage = true)
             imageViewArtwork.load(imageUrl) {
                 crossfade(true)
                 listener(
                     onSuccess = { _, _ ->
-                        imageViewArtwork.visibility = View.VISIBLE
-                        if (!attribution.isNullOrBlank()) {
-                            textViewAttribution.text = attribution
-                            textViewAttribution.visibility = View.VISIBLE
-                        } else {
-                            textViewAttribution.visibility = View.GONE
-                        }
+                        cardImage.visibility = View.VISIBLE
+                        updateCardPosition(hasImage = true)
                     },
                     onError = { _, _ ->
                         // Gracefully fallback to text-only mode when image loading fails
+                        cardImage.visibility = View.GONE
                         imageViewArtwork.visibility = View.GONE
-                        textViewAttribution.visibility = View.GONE
+                        updateCardPosition(hasImage = false)
                     }
                 )
             }
         } else {
+            cardImage.visibility = View.GONE
             imageViewArtwork.visibility = View.GONE
-            textViewAttribution.visibility = View.GONE
+            updateCardPosition(hasImage = false)
         }
+    }
+
+    private fun updateCardPosition(hasImage: Boolean) {
+        layoutRoot.gravity = if (hasImage) android.view.Gravity.TOP else android.view.Gravity.CENTER_VERTICAL
     }
 
     private fun getVersion(context: Context): String {

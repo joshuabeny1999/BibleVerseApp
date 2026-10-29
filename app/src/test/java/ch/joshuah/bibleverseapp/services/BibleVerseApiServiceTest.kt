@@ -2,6 +2,7 @@ package ch.joshuah.bibleverseapp.services
 
 import android.net.Uri
 import com.youversion.platform.core.BibleDefaults
+import com.youversion.platform.core.api.PaginatedResponse
 import com.youversion.platform.core.bibles.api.BiblesApi
 import com.youversion.platform.core.bibles.models.BiblePassage
 import com.youversion.platform.core.bibles.models.BibleVersion
@@ -38,7 +39,7 @@ class BibleVerseApiServiceTest {
         val votd = YouVersionVerseOfTheDay(day = 1, passageUsfm = "JHN.3.16")
         val passage = BiblePassage(
             id = "JHN.3.16",
-            content = "<p>For God so loved the world that he gave his one and only Son.</p>",
+            content = "<p><span>13</span>For God so loved the world that he gave his one and only Son.</p>",
             reference = "John 3:16"
         )
         val bibleVersion = BibleVersion(
@@ -67,11 +68,13 @@ class BibleVerseApiServiceTest {
             height = 1200,
             aspectRatio = 1.0
         )
+        val imageResponse = mock<PaginatedResponse<VerseImage>>()
+        whenever(imageResponse.data).thenReturn(listOf(verseImage))
 
-        whenever(votdApi.verseOfTheDay(eq(versionId))).thenReturn(votd)
+        whenever(votdApi.verseOfTheDay(anyOrNull())).thenReturn(votd)
         whenever(biblesApi.passage(eq(versionId), eq("JHN.3.16"), anyOrNull())).thenReturn(passage)
         whenever(biblesApi.version(eq(versionId))).thenReturn(bibleVersion)
-        whenever(verseImagesApi.verseImage(eq("JHN.3.16"))).thenReturn(verseImage)
+        whenever(verseImagesApi.verseImages(eq("JHN.3.16"), anyOrNull(), anyOrNull(), anyOrNull())).thenReturn(imageResponse)
 
         val result = service.fetchBibleVerse("111").first()
 
@@ -96,9 +99,9 @@ class BibleVerseApiServiceTest {
             reference = "John 3:16"
         )
 
-        whenever(votdApi.verseOfTheDay(eq(versionId))).thenReturn(votd)
+        whenever(votdApi.verseOfTheDay(anyOrNull())).thenReturn(votd)
         whenever(biblesApi.passage(eq(versionId), eq("JHN.3.16"), anyOrNull())).thenReturn(passage)
-        whenever(verseImagesApi.verseImage(eq("JHN.3.16"))).thenAnswer { throw IOException("Image API unavailable") }
+        whenever(verseImagesApi.verseImages(eq("JHN.3.16"), anyOrNull(), anyOrNull(), anyOrNull())).thenAnswer { throw IOException("Image API unavailable") }
 
         val result = service.fetchBibleVerse("111").first()
 
@@ -115,27 +118,30 @@ class BibleVerseApiServiceTest {
         val votd = YouVersionVerseOfTheDay(day = 1, passageUsfm = "GEN.1.1")
         val passage = BiblePassage(
             id = "GEN.1.1",
-            content = "In the beginning God created the heavens and the earth.",
+            content = "1 In the beginning God created the heavens and the earth.",
             reference = "Genesis 1:1"
         )
+        val emptyImageResponse = mock<PaginatedResponse<VerseImage>>()
+        whenever(emptyImageResponse.data).thenReturn(emptyList())
 
-        whenever(votdApi.verseOfTheDay(eq(defaultVersionId))).thenReturn(votd)
+        whenever(votdApi.verseOfTheDay(anyOrNull())).thenReturn(votd)
         whenever(biblesApi.passage(eq(defaultVersionId), eq("GEN.1.1"), anyOrNull())).thenReturn(passage)
+        whenever(verseImagesApi.verseImages(anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull())).thenReturn(emptyImageResponse)
 
         val result = service.fetchBibleVerse("NIV").first()
 
         assertTrue("Expected success result but was failure: ${result.exceptionOrNull()}", result.isSuccess)
         val verse = result.getOrThrow()
+        assertEquals("In the beginning God created the heavens and the earth.", verse.text)
         assertEquals("Genesis 1:1", verse.reference)
         assertEquals(defaultVersionId.toString(), verse.version)
     }
 
     @Test
     fun fetchBibleVerse_emptyPassageUsfm() = runBlocking {
-        val versionId = 111
         val votd = YouVersionVerseOfTheDay(day = 1, passageUsfm = "")
 
-        whenever(votdApi.verseOfTheDay(eq(versionId))).thenReturn(votd)
+        whenever(votdApi.verseOfTheDay(anyOrNull())).thenReturn(votd)
 
         val result = service.fetchBibleVerse("111").first()
 
@@ -145,9 +151,7 @@ class BibleVerseApiServiceTest {
 
     @Test
     fun fetchBibleVerse_sdkThrowsException() = runBlocking {
-        val versionId = 111
-
-        whenever(votdApi.verseOfTheDay(eq(versionId))).thenAnswer { throw IOException("Network error") }
+        whenever(votdApi.verseOfTheDay(anyOrNull())).thenAnswer { throw IOException("Network error") }
 
         val result = service.fetchBibleVerse("111").first()
 

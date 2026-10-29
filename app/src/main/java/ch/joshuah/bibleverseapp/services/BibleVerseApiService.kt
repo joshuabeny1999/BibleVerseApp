@@ -28,14 +28,20 @@ class BibleVerseApiService(
     suspend fun fetchBibleVerse(version: String): Flow<Result<BibleVerse>> = flow {
         try {
             val versionId = version.toIntOrNull() ?: BibleDefaults.VERSION_ID
+            val dayOfYear = java.util.Calendar.getInstance().get(java.util.Calendar.DAY_OF_YEAR)
 
-            val votd = votdApi.verseOfTheDay(versionId)
+            val votd = votdApi.verseOfTheDay(dayOfYear)
             if (votd.passageUsfm.isBlank()) {
                 emit(Result.failure(IllegalArgumentException("VOTD passage is empty or null")))
                 return@flow
             }
 
-            val passage = biblesApi.passage(versionId = versionId, passageId = votd.passageUsfm)
+            // Fetch passage in plain text format directly from YouVersion API
+            val passage = biblesApi.passage(
+                versionId = versionId,
+                passageId = votd.passageUsfm,
+                format = "text"
+            )
             if (passage.content.isBlank()) {
                 emit(Result.failure(IllegalArgumentException("Passage content is empty")))
                 return@flow
@@ -50,7 +56,27 @@ class BibleVerseApiService(
             }
 
             val verseImage = try {
-                verseImagesApi.verseImage(votd.passageUsfm)
+                val langTag = bibleVersion?.languageTag?.takeIf { it.isNotBlank() } ?: "en"
+                var response = verseImagesApi.verseImages(
+                    passageId = votd.passageUsfm,
+                    languageRanges = listOf(langTag),
+                    pageSize = 5
+                )
+                if (response.data.isEmpty()) {
+                    response = verseImagesApi.verseImages(
+                        passageId = votd.passageUsfm,
+                        languageRanges = listOf("en", "*"),
+                        pageSize = 5
+                    )
+                }
+                if (response.data.isEmpty()) {
+                    response = verseImagesApi.verseImages(
+                        passageId = votd.passageUsfm,
+                        languageRanges = emptyList(),
+                        pageSize = 5
+                    )
+                }
+                response.data.firstOrNull()
             } catch (e: CancellationException) {
                 throw e
             } catch (e: Exception) {
@@ -84,10 +110,19 @@ class BibleVerseApiService(
     }
 
     private fun stripHtml(html: String): String {
-        return try {
+        val rawText = try {
             HtmlCompat.fromHtml(html, HtmlCompat.FROM_HTML_MODE_LEGACY).toString().trim()
         } catch (e: Throwable) {
             html.replace(Regex("<[^>]*>"), "").trim()
+        }
+        return sanitizeVerseText(rawText)
+    }
+
+    companion object {
+        fun sanitizeVerseText(text: String): String {
+            return text.replace(Regex("(?m)^\\d+\\s*(?=[\\p{L}])"), "")
+                       .replace(Regex("(?m)^\\d+[a-zA-Z]?\\s*"), "")
+                       .trim()
         }
     }
 }

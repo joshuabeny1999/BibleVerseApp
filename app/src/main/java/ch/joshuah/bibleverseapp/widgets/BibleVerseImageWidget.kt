@@ -127,13 +127,17 @@ class BibleVerseImageWidget : AppWidgetProvider() {
                     if (bitmap != null) {
                         views.setImageViewBitmap(R.id.widget_image_imageViewArtwork, bitmap)
                         views.setViewVisibility(R.id.widget_image_imageViewArtwork, View.VISIBLE)
+                        // Keep image widget clean (no footer overlay) when image is loaded successfully
+                        views.setViewVisibility(R.id.widget_image_layoutFooter, View.GONE)
                     } else {
                         views.setImageViewResource(R.id.widget_image_imageViewArtwork, R.drawable.app_widget_background)
                         views.setViewVisibility(R.id.widget_image_imageViewArtwork, View.VISIBLE)
+                        views.setViewVisibility(R.id.widget_image_layoutFooter, View.VISIBLE)
                     }
                 } else {
                     views.setImageViewResource(R.id.widget_image_imageViewArtwork, R.drawable.app_widget_background)
                     views.setViewVisibility(R.id.widget_image_imageViewArtwork, View.VISIBLE)
+                    views.setViewVisibility(R.id.widget_image_layoutFooter, View.VISIBLE)
                 }
 
                 val intent = Intent(context, MainActivity::class.java)

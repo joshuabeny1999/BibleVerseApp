@@ -19,7 +19,7 @@ android {
 
         val apiKey = System.getenv("YOUVERSION_API_KEY")
             ?: (project.findProperty("YOUVERSION_API_KEY") as String?)
-            ?: "placeholder_youversion_api_key"
+            ?: "6BGY5riHwZAR5PppAsrshxOyx3xjtwBRyzJNB7nj98MeuFQ6"
         buildConfigField("String", "YOUVERSION_API_KEY", "\"$apiKey\"")
     }
 

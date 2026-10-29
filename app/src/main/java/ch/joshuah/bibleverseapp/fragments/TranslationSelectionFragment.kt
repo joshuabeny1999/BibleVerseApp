@@ -32,7 +32,7 @@ class TranslationSelectionFragment : Fragment() {
                 val prefs = PreferenceManager.getDefaultSharedPreferences(requireContext())
                 return TranslationSelectionViewModel(
                     sharedPreferences = prefs,
-                    defaultLanguageCode = Locale.getDefault().language
+                    defaultLanguageInput = Locale.getDefault().language
                 ) as T
             }
         }
@@ -74,7 +74,21 @@ class TranslationSelectionFragment : Fragment() {
             viewModel.availableLanguages.collectLatest { languages ->
                 languageList = languages
                 val displayNames = languages.map { langCode ->
-                    val locale = Locale.forLanguageTag(langCode)
+                    val locale = when (langCode.lowercase()) {
+                        "eng" -> Locale.ENGLISH
+                        "deu" -> Locale.GERMAN
+                        "spa" -> Locale.forLanguageTag("es")
+                        "fra" -> Locale.FRENCH
+                        "por" -> Locale.forLanguageTag("pt")
+                        "ita" -> Locale.ITALIAN
+                        "nld" -> Locale.forLanguageTag("nl")
+                        "rus" -> Locale.forLanguageTag("ru")
+                        "zho" -> Locale.CHINESE
+                        "kor" -> Locale.KOREAN
+                        "jpn" -> Locale.JAPANESE
+                        "ara" -> Locale.forLanguageTag("ar")
+                        else -> Locale.forLanguageTag(langCode)
+                    }
                     val name = locale.getDisplayName(Locale.getDefault())
                         .replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString() }
                     "$name ($langCode)"
@@ -96,9 +110,17 @@ class TranslationSelectionFragment : Fragment() {
         }
 
         binding.spinnerLanguage.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            private var isInitial = true
+
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 if (position in languageList.indices) {
                     val langCode = languageList[position]
+                    if (isInitial) {
+                        isInitial = false
+                        if (langCode == viewModel.selectedLanguage.value) {
+                            return
+                        }
+                    }
                     if (langCode != viewModel.selectedLanguage.value) {
                         viewModel.selectLanguage(langCode)
                     }

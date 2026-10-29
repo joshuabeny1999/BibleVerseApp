@@ -37,6 +37,8 @@
     <string name="preference_color_title">Wähle Textfarbe des Widgets</string>
     <string name="preference_color_summary">Wähle Textfarbe des Widgets</string>
     <string name="preference_category_appearance_title">Erscheinungsbild</string>
+    <string name="preference_show_verse_image_title">Versbild anzeigen</string>
+    <string name="preference_show_verse_image_summary">Tägliches Versbild auf dem Hauptbildschirm anzeigen</string>
     <string name="preference_font_size_title">Schriftgrösse</string>
     <string name="preference_font_size_default_value">18</string>
     <string name="preference_widget_font_size_title">Wähle Schriftgrösse des Widgets</string>

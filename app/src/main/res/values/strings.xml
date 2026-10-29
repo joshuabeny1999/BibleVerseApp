@@ -37,6 +37,8 @@
     <string name="preference_color_title">Choose Widget Text Color</string>
     <string name="preference_color_summary">Choose Text color for widget</string>
     <string name="preference_category_appearance_title">Appearance</string>
+    <string name="preference_show_verse_image_title">Show Verse Image</string>
+    <string name="preference_show_verse_image_summary">Display daily scripture artwork on the main screen</string>
     <string name="preference_font_size_title">Font Size</string>
     <string name="preference_font_size_default_value">18</string>
     <string name="preference_widget_font_size_title">Choose Widget Font Size</string>

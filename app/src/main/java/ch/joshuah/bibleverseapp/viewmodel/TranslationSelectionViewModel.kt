@@ -15,12 +15,16 @@ import java.util.Locale
 class TranslationSelectionViewModel(
     private val biblesApi: BiblesApi = YouVersionApi.bible,
     private val sharedPreferences: SharedPreferences? = null,
-    private val defaultLanguageCode: String = Locale.getDefault().language
+    defaultLanguageInput: String = Locale.getDefault().language
 ) : ViewModel() {
+
+    private val defaultLanguageCode: String = mapToYouVersionLanguageCode(defaultLanguageInput)
 
     private val _allVersions = MutableStateFlow<List<BibleVersion>>(emptyList())
 
-    private val _availableLanguages = MutableStateFlow<List<String>>(emptyList())
+    private val _availableLanguages = MutableStateFlow<List<String>>(
+        listOf("eng", "deu", "spa", "fra", "por", "ita", "nld", "rus", "zho", "kor", "jpn", "ara")
+    )
     val availableLanguages: StateFlow<List<String>> = _availableLanguages.asStateFlow()
 
     private val _selectedLanguage = MutableStateFlow<String>(defaultLanguageCode)
@@ -40,50 +44,122 @@ class TranslationSelectionViewModel(
         if (!savedVersion.isNullOrBlank()) {
             _selectedTranslationId.value = savedVersion
         }
-        loadVersions()
+
+        val initialLanguage = if (_availableLanguages.value.contains(defaultLanguageCode)) {
+            defaultLanguageCode
+        } else {
+            _availableLanguages.value.firstOrNull() ?: "eng"
+        }
+        _selectedLanguage.value = initialLanguage
+        loadVersionsForLanguage(initialLanguage)
     }
 
     fun loadVersions() {
+        loadVersionsForLanguage(_selectedLanguage.value)
+    }
+
+    fun selectLanguage(languageCode: String) {
+        val mappedCode = mapToYouVersionLanguageCode(languageCode)
+        _selectedLanguage.value = mappedCode
+        loadVersionsForLanguage(mappedCode)
+    }
+
+    private fun loadVersionsForLanguage(languageCode: String) {
         viewModelScope.launch {
+            val memoryCached = cachedVersionsMap[languageCode]
+            if (!memoryCached.isNullOrEmpty()) {
+                _allVersions.value = memoryCached
+                _filteredTranslations.value = memoryCached
+                return@launch
+            }
+
             _isLoading.value = true
             try {
-                val response = biblesApi.versions()
-                val versions = response.data
-                _allVersions.value = versions
+                var response = biblesApi.versions(languageCode = languageCode, pageSize = 50)
+                var versions = response.data
 
-                val languages = versions
-                    .mapNotNull { it.languageTag?.lowercase()?.split("-")?.firstOrNull() }
-                    .filter { it.isNotBlank() }
-                    .distinct()
-                    .sorted()
-                _availableLanguages.value = languages
+                if (versions.isEmpty()) {
+                    val altCode = when (languageCode) {
+                        "eng" -> "en"
+                        "deu" -> "de"
+                        "spa" -> "es"
+                        "fra" -> "fr"
+                        "por" -> "pt"
+                        "ita" -> "it"
+                        "nld" -> "nl"
+                        "rus" -> "ru"
+                        "zho" -> "zh"
+                        "kor" -> "ko"
+                        "jpn" -> "ja"
+                        "ara" -> "ar"
+                        else -> ""
+                    }
+                    if (altCode.isNotBlank()) {
+                        response = biblesApi.versions(languageCode = altCode, pageSize = 50)
+                        versions = response.data
+                    }
+                }
 
-                if (languages.isNotEmpty()) {
-                    val matchingLang = languages.find { it.equals(defaultLanguageCode, ignoreCase = true) }
-                    val currentLang = matchingLang ?: _selectedLanguage.value.takeIf { languages.contains(it) } ?: languages.first()
-                    _selectedLanguage.value = currentLang
-                    updateFilteredTranslations(currentLang)
+                if (versions.isEmpty()) {
+                    val allResponse = biblesApi.versions(languageCode = null, pageSize = 99)
+                    val allVers = allResponse.data
+                    if (allVers.isNotEmpty()) {
+                        val filtered = filterVersionsByLanguage(allVers, languageCode)
+                        versions = filtered.ifEmpty { allVers }
+                    }
+                }
+
+                if (versions.isNotEmpty()) {
+                    cachedVersionsMap[languageCode] = versions
+                    _allVersions.value = versions
+                    _filteredTranslations.value = versions
+
+                    val currentLangs = _availableLanguages.value.toMutableList()
+                    if (!currentLangs.contains(languageCode)) {
+                        currentLangs.add(0, languageCode)
+                        _availableLanguages.value = currentLangs
+                    }
+                } else {
+                    _filteredTranslations.value = emptyList()
                 }
             } catch (e: Exception) {
-                // Ignore exception in loading versions
+                try {
+                    val allResponse = biblesApi.versions(languageCode = null, pageSize = 99)
+                    val allVers = allResponse.data
+                    if (allVers.isNotEmpty()) {
+                        _allVersions.value = allVers
+                        val filtered = filterVersionsByLanguage(allVers, languageCode)
+                        val finalVers = filtered.ifEmpty { allVers }
+                        cachedVersionsMap[languageCode] = finalVers
+                        _filteredTranslations.value = finalVers
+                    }
+                } catch (_: Exception) {
+                    // Ignore exception if rate limited, UI keeps previous state gracefully
+                }
             } finally {
                 _isLoading.value = false
             }
         }
     }
 
-    fun selectLanguage(languageCode: String) {
-        _selectedLanguage.value = languageCode
-        updateFilteredTranslations(languageCode)
-    }
-
-    private fun updateFilteredTranslations(languageCode: String) {
-        val target = languageCode.lowercase()
-        val filtered = _allVersions.value.filter { version ->
-            val tag = version.languageTag?.lowercase().orEmpty()
-            tag == target || tag.startsWith("$target-") || tag.split("-").firstOrNull() == target
+    private fun filterVersionsByLanguage(versions: List<BibleVersion>, languageCode: String): List<BibleVersion> {
+        val targetLang = languageCode.lowercase()
+        return versions.filter { ver ->
+            val tag = ver.languageTag.orEmpty().lowercase()
+            tag.startsWith(targetLang) ||
+                (targetLang == "eng" && (tag.startsWith("en") || tag.startsWith("eng"))) ||
+                (targetLang == "deu" && (tag.startsWith("de") || tag.startsWith("deu"))) ||
+                (targetLang == "spa" && (tag.startsWith("es") || tag.startsWith("spa"))) ||
+                (targetLang == "fra" && (tag.startsWith("fr") || tag.startsWith("fra"))) ||
+                (targetLang == "por" && (tag.startsWith("pt") || tag.startsWith("por"))) ||
+                (targetLang == "ita" && (tag.startsWith("it") || tag.startsWith("ita"))) ||
+                (targetLang == "nld" && (tag.startsWith("nl") || tag.startsWith("nld"))) ||
+                (targetLang == "rus" && (tag.startsWith("ru") || tag.startsWith("rus"))) ||
+                (targetLang == "zho" && (tag.startsWith("zh") || tag.startsWith("zho"))) ||
+                (targetLang == "kor" && (tag.startsWith("ko") || tag.startsWith("kor"))) ||
+                (targetLang == "jpn" && (tag.startsWith("ja") || tag.startsWith("jpn"))) ||
+                (targetLang == "ara" && (tag.startsWith("ar") || tag.startsWith("ara")))
         }
-        _filteredTranslations.value = filtered
     }
 
     fun selectTranslation(version: BibleVersion) {
@@ -105,7 +181,7 @@ class TranslationSelectionViewModel(
             selectTranslation(foundVersion)
         } else {
             val idStr = versionId.toString()
-            val versionName = foundVersion?.title ?: "Version $versionId"
+            val versionName = "Version $versionId"
             _selectedTranslationId.value = idStr
             sharedPreferences?.edit()
                 ?.putString(PREF_KEY_BIBLE_VERSION, idStr)
@@ -114,8 +190,29 @@ class TranslationSelectionViewModel(
         }
     }
 
+    private fun mapToYouVersionLanguageCode(inputCode: String): String {
+        val code = inputCode.lowercase().trim()
+        return when (code) {
+            "en", "eng", "en-us", "en-gb" -> "eng"
+            "de", "deu", "de-de", "ger" -> "deu"
+            "es", "spa", "es-es" -> "spa"
+            "fr", "fra", "fr-fr", "fre" -> "fra"
+            "pt", "por", "pt-br", "pt-pt" -> "por"
+            "it", "ita" -> "ita"
+            "nl", "nld", "dut" -> "nld"
+            "ru", "rus" -> "rus"
+            "zh", "zho", "chi" -> "zho"
+            "ko", "kor" -> "kor"
+            "ja", "jpn" -> "jpn"
+            "ar", "ara" -> "ara"
+            else -> if (code.length == 3) code else "eng"
+        }
+    }
+
     companion object {
         const val PREF_KEY_BIBLE_VERSION = "bible_version"
         const val PREF_KEY_BIBLE_VERSION_NAME = "bible_version_name"
+
+        private val cachedVersionsMap = mutableMapOf<String, List<BibleVersion>>()
     }
 }
