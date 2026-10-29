@@ -5,6 +5,7 @@
     <string name="menu_credits">Credits</string>
     <string name="fragment_verse_loading_verse">Loading bible verse…</string>
     <string name="fragment_verse_buttonShare">Share</string>
+    <string name="fragment_verse_image_description">Verse of the Day artwork</string>
     <string name="fragment_verse_error_no_verse">No Bible verse available.</string>
     <string name="fragment_verse_error_no_internet">Error loading Bible verse. Check your internet connection!</string>
     <string name="fragment_credit_textViewCreditText">App Development by <a href="https://joshuah.ch">Joshua Hürzeler</a></string>

@@ -82,6 +82,7 @@ dependencies {
     implementation("com.squareup.okhttp3:okhttp:4.11.0")
     implementation("androidx.room:room-ktx:$room_version")
     implementation("com.jaredrummler:colorpicker:1.1.0")
+    implementation("io.coil-kt:coil:2.7.0")
 
     ksp("androidx.room:room-compiler:$room_version")
 

@@ -5,6 +5,7 @@
     <string name="menu_credits">Impressum</string>
     <string name="fragment_verse_loading_verse">Bibelvers wird geladen…</string>
     <string name="fragment_verse_buttonShare">Teilen</string>
+    <string name="fragment_verse_image_description">Vers des Tages Kunst</string>
     <string name="fragment_credit_textViewCreditText">App-Entwicklung durch <a href="https://joshuah.ch">Joshua Hürzeler</a></string>
     <string name="fragment_credit_textViewCreditTitle">Impressum</string>
     <string name="fragment_credit_textViewVerseTitle">Vers des Tages</string>
