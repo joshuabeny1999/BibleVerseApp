@@ -3,78 +3,79 @@ package ch.joshuah.bibleverseapp.services
 import android.net.Uri
 import androidx.core.text.HtmlCompat
 import ch.joshuah.bibleverseapp.data.BibleVerse
-import ch.joshuah.bibleverseapp.data.VotdApiResponse
-import com.google.gson.Gson
+import com.youversion.platform.core.BibleDefaults
+import com.youversion.platform.core.api.YouVersionApi
+import com.youversion.platform.core.bibles.api.BiblesApi
+import com.youversion.platform.core.votd.api.VotdApi
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.suspendCancellableCoroutine
-import okhttp3.*
-import java.io.IOException
 import java.util.Date
 
-class BibleVerseApiService {
-    private val client = OkHttpClient()
-    private val gson = Gson()
-
+class BibleVerseApiService(
+    private val votdApi: VotdApi = YouVersionApi.votd,
+    private val biblesApi: BiblesApi = YouVersionApi.bible,
+    private val uriParser: (String) -> Uri = { url ->
+        try {
+            Uri.parse(url) ?: Uri.EMPTY
+        } catch (e: Throwable) {
+            Uri.EMPTY
+        }
+    }
+) {
     suspend fun fetchBibleVerse(version: String): Flow<Result<BibleVerse>> = flow {
-        val apiUrl = "https://www.biblegateway.com/votd/get/?format=json&version=$version"
+        try {
+            val versionId = version.toIntOrNull() ?: BibleDefaults.VERSION_ID
 
-        val request = Request.Builder()
-            .url(apiUrl)
-            .addHeader("User-Agent", "BibleVerseApp (Android)")
-            .get()
-            .build()
-
-        val response = try {
-            client.newCall(request).await()
-        } catch (e: IOException) {
-            null
-        }
-
-        if (response?.isSuccessful == true) {
-            val json = response.body?.string()
-            try {
-                emit(Result.success(parseJsonToBibleVerse(json)))
-            } catch (
-                e: IllegalArgumentException
-            ) {
-                emit(Result.failure(e))
+            val votd = votdApi.verseOfTheDay(versionId)
+            if (votd.passageUsfm.isBlank()) {
+                emit(Result.failure(IllegalArgumentException("VOTD passage is empty or null")))
+                return@flow
             }
-        } else {
-            emit(Result.failure(Error("Error fetching Bible verse from the API")))
+
+            val passage = biblesApi.passage(versionId = versionId, passageId = votd.passageUsfm)
+            if (passage.content.isBlank()) {
+                emit(Result.failure(IllegalArgumentException("Passage content is empty")))
+                return@flow
+            }
+
+            val bibleVersion = try {
+                biblesApi.version(versionId)
+            } catch (e: CancellationException) {
+                throw e
+            } catch (e: Exception) {
+                null
+            }
+
+            val cleanText = stripHtml(passage.content)
+            val reference = passage.reference.ifBlank { votd.passageUsfm }
+            val versionStr = versionId.toString()
+            val versionLong = bibleVersion?.localizedTitle ?: bibleVersion?.title ?: "Bible"
+            val shareUrlStr = "https://www.bible.com/bible/$versionId/${votd.passageUsfm}"
+            val linkUri = uriParser(shareUrlStr)
+
+            val bibleVerse = BibleVerse(
+                text = cleanText,
+                reference = reference,
+                version = versionStr,
+                versionLong = versionLong,
+                link = linkUri,
+                date = Date()
+            )
+
+            emit(Result.success(bibleVerse))
+        } catch (e: CancellationException) {
+            throw e
+        } catch (e: Exception) {
+            emit(Result.failure(e))
         }
     }
 
-    private suspend fun Call.await(): Response = suspendCancellableCoroutine { continuation ->
-        enqueue(object : Callback {
-            override fun onFailure(call: Call, e: IOException) {
-                continuation.resumeWith(Result.failure(e))
-            }
-
-            override fun onResponse(call: Call, response: Response) {
-                continuation.resumeWith(Result.success(response))
-            }
-        })
-
-        continuation.invokeOnCancellation { cancel() }
-    }
-
-    private fun parseJsonToBibleVerse(json: String?): BibleVerse {
-        if (json.isNullOrEmpty()) {
-            throw IllegalArgumentException("JSON is empty or null")
+    private fun stripHtml(html: String): String {
+        return try {
+            HtmlCompat.fromHtml(html, HtmlCompat.FROM_HTML_MODE_LEGACY).toString().trim()
+        } catch (e: Throwable) {
+            html.replace(Regex("<[^>]*>"), "").trim()
         }
-        val votdApiResponse = gson.fromJson(json, VotdApiResponse::class.java)
-
-        if (votdApiResponse.votd.text.isEmpty()) {
-            throw IllegalArgumentException("JSON does not contain a Bible verse")
-        }
-
-        val text = HtmlCompat.fromHtml(votdApiResponse.votd.text, HtmlCompat.FROM_HTML_MODE_LEGACY).toString()
-        val reference = votdApiResponse.votd.display_ref
-        val version = votdApiResponse.votd.version_id
-        val versionLong = HtmlCompat.fromHtml(votdApiResponse.votd.version, HtmlCompat.FROM_HTML_MODE_LEGACY).toString()
-        val link = votdApiResponse.votd.permalink
-
-        return BibleVerse(text, reference, version, versionLong, Uri.parse(link), Date())
     }
 }
