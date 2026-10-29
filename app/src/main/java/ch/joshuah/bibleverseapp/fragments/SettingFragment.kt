@@ -13,6 +13,7 @@ import androidx.preference.PreferenceManager
 import androidx.preference.SwitchPreferenceCompat
 import ch.joshuah.bibleverseapp.R
 import ch.joshuah.bibleverseapp.services.DailyVerseService
+import ch.joshuah.bibleverseapp.widgets.BibleVerseImageWidget
 import ch.joshuah.bibleverseapp.widgets.BibleVerseWidget
 import com.jaredrummler.android.colorpicker.ColorPreferenceCompat
 
@@ -59,6 +60,7 @@ class SettingFragment : PreferenceFragmentCompat() {
 
         widgetColorPreference.setOnPreferenceChangeListener { _, _ ->
             BibleVerseWidget.updateWidgets(requireContext())
+            BibleVerseImageWidget.updateWidgets(requireContext())
             true
         }
 
@@ -72,6 +74,7 @@ class SettingFragment : PreferenceFragmentCompat() {
 
         widgetFontSizePreference.setOnPreferenceChangeListener { _, _ ->
             BibleVerseWidget.updateWidgets(requireContext())
+            BibleVerseImageWidget.updateWidgets(requireContext())
             true
         }
     }
