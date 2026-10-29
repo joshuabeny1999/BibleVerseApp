@@ -28,7 +28,9 @@ class DailyVerseService {
 
         val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
 
-        val intent = Intent(context, NotificationReceiver::class.java)
+        val intent = Intent(context, NotificationReceiver::class.java).apply {
+            action = "ch.joshuah.bibleverseapp.NOTIFICATION_ALARM"
+        }
         val channelId = createNotificationChannel(context)
         intent.putExtra("channelId", channelId)
 

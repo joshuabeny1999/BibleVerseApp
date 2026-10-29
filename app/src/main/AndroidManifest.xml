@@ -58,7 +58,11 @@
         <!-- Receiver für Benachrichtigungen -->
         <receiver
             android:name=".services.NotificationReceiver"
-            android:exported="false" />
+            android:exported="true">
+            <intent-filter>
+                <action android:name="ch.joshuah.bibleverseapp.NOTIFICATION_ALARM" />
+            </intent-filter>
+        </receiver>
 
         <!-- Receiver für Geräte-Neustart -->
         <receiver
