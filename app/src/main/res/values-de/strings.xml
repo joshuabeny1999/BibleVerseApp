@@ -9,9 +9,9 @@
     <string name="fragment_credit_textViewCreditText">App-Entwicklung durch <a href="https://joshuah.ch">Joshua Hürzeler</a></string>
     <string name="fragment_credit_textViewCreditTitle">Impressum</string>
     <string name="fragment_credit_textViewVerseTitle">Vers des Tages</string>
-    <string name="fragment_credit_textViewVerseText">Bereitgestellt von BibleGateway.com</string>
+    <string name="fragment_credit_textViewVerseText">Bereitgestellt vom YouVersion Platform SDK</string>
     <string name="fragment_credit_textViewThanksTitle">Besonderer Dank</string>
-    <string name="fragment_credit_textViewThanksText">Wir danken BibleGateway.com herzlich für ihre grosszügige Bereitstellung täglicher Verse und ihr unermüdliches Engagement für die Verbreitung des Wortes Gottes.</string>
+    <string name="fragment_credit_textViewThanksText">Wir danken YouVersion und Life.Church herzlich für die Bereitstellung täglicher Verse, Übersetzungen und Vers-Bilder über das YouVersion Platform SDK sowie für ihr unermüdliches Engagement für die Verbreitung des Wortes Gottes.</string>
     <string name="preference_category_bible_version_title">Bibelübersetzung</string>
     <string name="preference_listPreference_bible_version_title">Bibelübersetzung auswählen</string>
     <string name="preference_listPreference_bible_version_default_value">111</string>
@@ -46,4 +46,9 @@
     <string name="font_size_medium">Mittel</string>
     <string name="font_size_large">Gross</string>
     <string name="font_size_extra_large">Sehr gross</string>
+
+    <!-- Version & Copyright -->
+    <string name="app_version_info">Version 2.0.0</string>
+    <string name="youversion_copyright_notice">Versinhalte und Bilder © YouVersion / Life.Church. Alle Rechte vorbehalten.</string>
+    <string name="fragment_credit_version">Version 2.0.0</string>
 </resources>

@@ -1,0 +1,4 @@
+- Migrated Bible provider to YouVersion Platform SDK.
+- Added dynamic language and Bible translation selection.
+- Added daily Verse of the Day image artwork support.
+- Added dedicated Daily Verse Image Home Screen Widget.
