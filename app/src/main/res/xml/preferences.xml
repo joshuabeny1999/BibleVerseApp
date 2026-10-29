@@ -8,13 +8,10 @@
         app:title="@string/preference_category_bible_version_title"
         app:key="bible_version_category"
         app:iconSpaceReserved="false">
-        <ListPreference
+        <Preference
             app:key="bible_version"
             app:title="@string/preference_listPreference_bible_version_title"
-            app:summary="%s"
-            app:defaultValue="@string/preference_listPreference_bible_version_default_value"
-            app:entries="@array/bible_versions"
-            app:entryValues="@array/bible_versions_values"
+            app:summary="@string/preference_listPreference_bible_version_summary"
             app:iconSpaceReserved="false"
             app:singleLineTitle="false"
             />
