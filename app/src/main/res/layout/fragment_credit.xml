@@ -1,5 +1,5 @@
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
@@ -8,12 +8,10 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/fragment_credit_textViewCreditTitle"
-        android:textAppearance="?android:attr/textAppearanceLarge"
         android:layout_gravity="center"
         android:layout_marginTop="16dp"
-
-        />
+        android:text="@string/fragment_credit_textViewCreditTitle"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <TextView
         android:id="@+id/fragment_credit_textViewCreditText"
@@ -25,40 +23,58 @@
         android:textAppearance="?attr/textAppearanceBody1" />
 
     <TextView
+        android:id="@+id/fragment_credit_textViewVersion"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/fragment_credit_textViewVerseTitle"
-        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:layout_gravity="center"
+        android:layout_marginTop="4dp"
+        android:text="@string/fragment_credit_version"
+        android:textAppearance="?attr/textAppearanceCaption" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginTop="16dp"
-        />
+        android:text="@string/fragment_credit_textViewVerseTitle"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
+        android:autoLink="web"
+        android:focusable="true"
         android:text="@string/fragment_credit_textViewVerseText"
         android:textAlignment="center"
-        android:autoLink="web"
-        android:focusable="true"
         android:textAppearance="?attr/textAppearanceBody1" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/fragment_credit_textViewThanksTitle"
-        android:textAppearance="?android:attr/textAppearanceLarge"
         android:layout_gravity="center"
-        android:layout_marginTop="16dp" />
+        android:layout_marginTop="16dp"
+        android:text="@string/fragment_credit_textViewThanksTitle"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
+        android:autoLink="web"
+        android:focusable="true"
         android:text="@string/fragment_credit_textViewThanksText"
         android:textAlignment="center"
-        android:autoLink="web"
-        android:focusable="true"
         android:textAppearance="?attr/textAppearanceBody1" />
+
+    <TextView
+        android:id="@+id/fragment_credit_textViewCopyright"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="12dp"
+        android:text="@string/youversion_copyright_notice"
+        android:textAlignment="center"
+        android:textAppearance="?attr/textAppearanceCaption" />
 
 </LinearLayout>

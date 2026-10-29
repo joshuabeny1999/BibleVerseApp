@@ -18,7 +18,7 @@ class BibleVerseRepository(context: Context) {
         val database = Room.databaseBuilder(
             context,
             AppDatabase::class.java, "bible_verse_app.db"
-        ).build()
+        ).fallbackToDestructiveMigration(true).build()
         bibleVerseDao = database.bibleVerseDao()
     }
 
@@ -30,7 +30,8 @@ class BibleVerseRepository(context: Context) {
         return bibleVerseDao.findByDayAndVersion(date, version)
     }
 
-    private suspend fun insertBibleVerse(verse: BibleVerse) {
+    private suspend fun saveBibleVerse(verse: BibleVerse) {
+        bibleVerseDao.deleteByDayAndVersion(verse.date, verse.version)
         bibleVerseDao.insert(verse)
     }
 
@@ -41,20 +42,29 @@ class BibleVerseRepository(context: Context) {
     fun getDailyBibleVerse(date: Date, version: String): Flow<Result<BibleVerse>> = flow {
         val cachedVerse = getBibleVerseByDayAndVersion(date, version)
 
+        // If we have a cached verse for today, emit it immediately
         if (cachedVerse != null) {
-            emit(Result.success(cachedVerse))
-        } else {
+            val sanitized = cachedVerse.copy(text = BibleVerseApiService.sanitizeVerseText(cachedVerse.text))
+            emit(Result.success(sanitized))
+        }
+
+        // Fetch from network if no cached verse exists or cached verse is missing image URL
+        if (cachedVerse == null || cachedVerse.imageUrl.isNullOrBlank()) {
             bibleVerseApiService.fetchBibleVerse(version).collect { result ->
                 if (result.isSuccess) {
                     val apiVerse = result.getOrNull()
                     if (apiVerse != null) {
-                        insertBibleVerse(apiVerse)
+                        saveBibleVerse(apiVerse)
                         emit(Result.success(apiVerse))
-                    } else {
-                        emit(Result.failure(Error("No Bible verse available from the API")))
                     }
-                } else if (result.isFailure) {
-                    emit(Result.failure(Error("Error fetching Bible verse from the API: ${result.exceptionOrNull()?.message}")))
+                } else {
+                    if (cachedVerse != null) {
+                        val sanitized = cachedVerse.copy(text = BibleVerseApiService.sanitizeVerseText(cachedVerse.text))
+                        emit(Result.success(sanitized))
+                    } else {
+                        val exception = result.exceptionOrNull()
+                        emit(Result.failure(Error("Error fetching Bible verse: ${exception?.message}")))
+                    }
                 }
             }
         }
@@ -85,5 +95,4 @@ class BibleVerseRepository(context: Context) {
             }
         }
     }
-
 }

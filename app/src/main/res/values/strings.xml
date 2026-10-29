@@ -5,17 +5,23 @@
     <string name="menu_credits">Credits</string>
     <string name="fragment_verse_loading_verse">Loading bible verse…</string>
     <string name="fragment_verse_buttonShare">Share</string>
+    <string name="fragment_verse_image_description">Verse of the Day artwork</string>
     <string name="fragment_verse_error_no_verse">No Bible verse available.</string>
     <string name="fragment_verse_error_no_internet">Error loading Bible verse. Check your internet connection!</string>
     <string name="fragment_credit_textViewCreditText">App Development by <a href="https://joshuah.ch">Joshua Hürzeler</a></string>
     <string name="fragment_credit_textViewCreditTitle">Credits</string>
     <string name="fragment_credit_textViewVerseTitle">Verse of the Day</string>
-    <string name="fragment_credit_textViewVerseText">Powered by BibleGateway.com</string>
+    <string name="fragment_credit_textViewVerseText">Powered by YouVersion Platform SDK</string>
     <string name="fragment_credit_textViewThanksTitle">Special Thanks</string>
-    <string name="fragment_credit_textViewThanksText">We extend our gratitude to BibleGateway.com for their generous provision of daily verses and unwavering commitment to sharing the Word of God.</string>
+    <string name="fragment_credit_textViewThanksText">We extend our gratitude to YouVersion and Life.Church for providing daily verses, translations, and verse images via the YouVersion Platform SDK, and for their unwavering commitment to sharing the Word of God.</string>
     <string name="preference_category_bible_version_title">Bible Version</string>
     <string name="preference_listPreference_bible_version_title">Select Bible Version</string>
-    <string name="preference_listPreference_bible_version_default_value">NLT</string>
+    <string name="preference_listPreference_bible_version_default_value">111</string>
+    <string name="preference_listPreference_bible_version_summary">Select language and translation</string>
+    <string name="translation_selection_title">Select Bible Translation</string>
+    <string name="translation_selection_language_label">Language:</string>
+    <string name="translation_selection_loading">Loading translations…</string>
+    <string name="translation_selection_empty">No translations available for this language.</string>
     <string name="preference_category_notifications_title">Notifications</string>
     <string name="preference_switchPreference_enable_notifications_title">Enable Daily Notifications</string>
     <string name="preference_switchPreference_enable_notifications_summary">Receive daily Bible verses (Time may vary slightly for battery optimization)</string>
@@ -31,6 +37,8 @@
     <string name="preference_color_title">Choose Widget Text Color</string>
     <string name="preference_color_summary">Choose Text color for widget</string>
     <string name="preference_category_appearance_title">Appearance</string>
+    <string name="preference_show_verse_image_title">Show Verse Image</string>
+    <string name="preference_show_verse_image_summary">Display daily scripture artwork on the main screen</string>
     <string name="preference_font_size_title">Font Size</string>
     <string name="preference_font_size_default_value">18</string>
     <string name="preference_widget_font_size_title">Choose Widget Font Size</string>
@@ -40,4 +48,9 @@
     <string name="font_size_medium">Medium</string>
     <string name="font_size_large">Large</string>
     <string name="font_size_extra_large">Extra Large</string>
+
+    <!-- Version & Copyright -->
+    <string name="app_version_info">Version 2.0.0</string>
+    <string name="youversion_copyright_notice">Verse content and artwork © YouVersion / Life.Church. All rights reserved.</string>
+    <string name="fragment_credit_version">Version 2.0.0</string>
 </resources>

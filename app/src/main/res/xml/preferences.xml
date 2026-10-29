@@ -8,13 +8,10 @@
         app:title="@string/preference_category_bible_version_title"
         app:key="bible_version_category"
         app:iconSpaceReserved="false">
-        <ListPreference
+        <Preference
             app:key="bible_version"
             app:title="@string/preference_listPreference_bible_version_title"
-            app:summary="%s"
-            app:defaultValue="@string/preference_listPreference_bible_version_default_value"
-            app:entries="@array/bible_versions"
-            app:entryValues="@array/bible_versions_values"
+            app:summary="@string/preference_listPreference_bible_version_summary"
             app:iconSpaceReserved="false"
             app:singleLineTitle="false"
             />
@@ -25,6 +22,14 @@
         app:title="@string/preference_category_appearance_title"
         app:key="appearance_category"
         app:iconSpaceReserved="false">
+        <SwitchPreferenceCompat
+            app:key="show_verse_image"
+            app:title="@string/preference_show_verse_image_title"
+            app:summary="@string/preference_show_verse_image_summary"
+            app:defaultValue="true"
+            app:iconSpaceReserved="false"
+            app:singleLineTitle="false"
+            />
         <ListPreference
             app:key="font_size"
             app:title="@string/preference_font_size_title"

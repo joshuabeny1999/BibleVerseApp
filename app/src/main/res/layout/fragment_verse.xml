@@ -1,27 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:fillViewport="true"
     tools:context=".MainActivity">
 
-    <com.google.android.material.card.MaterialCardView
-        android:id="@+id/card"
-        style="?attr/materialCardViewElevatedStyle"
+    <LinearLayout
+        android:id="@+id/fragment_verse_layoutRoot"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="8dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:layout_editor_absoluteX="8dp">
+        android:gravity="center_vertical"
+        android:orientation="vertical"
+        android:padding="8dp">
 
-        <LinearLayout
+        <!-- Separate Image Artwork Card -->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/card_image"
+            style="?attr/materialCardViewElevatedStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:layout_margin="8dp"
+            android:visibility="gone"
+            tools:visibility="visible">
 
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:id="@+id/fragment_verse_imageViewArtwork"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:adjustViewBounds="true"
+                    android:scaleType="fitCenter"
+                    android:contentDescription="@string/fragment_verse_image_description" />
+            </FrameLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- Separate Verse Text Card -->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/card_text"
+            style="?attr/materialCardViewElevatedStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -29,50 +53,42 @@
                 android:orientation="vertical"
                 android:padding="16dp">
 
-                <!-- Title, secondary and supporting text -->
                 <TextView
                     android:id="@+id/fragment_verse_textViewBibleVerse"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/fragment_verse_loading_verse"
                     android:textAppearance="?attr/textAppearanceTitleMedium" />
 
                 <TextView
                     android:id="@+id/fragment_verse_textViewBibleVerseReference"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
                     android:text=""
                     android:textAppearance="?attr/textAppearanceBodyMedium"
                     android:textColor="?android:attr/textColorSecondary" />
-            </LinearLayout>
 
-            <!-- Buttons -->
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="8dp"
-                android:orientation="horizontal">
-
-                <View
-                    android:layout_width="0dp"
-                    android:layout_height="0dp"
-                    android:layout_weight="1" />
-
-                <Button
-                    android:id="@+id/fragment_verse_buttonShare"
-                    style="@style/Widget.Material3.Button.Icon"
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:id="@+id/fragment_verse_layoutButtonContainer"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="8dp"
-                    android:text="@string/fragment_verse_buttonShare"
-                    app:icon="@drawable/ic_share_24" />
+                    android:layout_marginTop="12dp"
+                    android:gravity="end"
+                    android:orientation="horizontal">
+
+                    <Button
+                        android:id="@+id/fragment_verse_buttonShare"
+                        style="@style/Widget.Material3.Button.Icon"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/fragment_verse_buttonShare"
+                        app:icon="@drawable/ic_share_24" />
+                </LinearLayout>
+
             </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
 
-        </LinearLayout>
+    </LinearLayout>
 
-    </com.google.android.material.card.MaterialCardView>
-
-
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.core.widget.NestedScrollView>
