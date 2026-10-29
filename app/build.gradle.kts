@@ -16,6 +16,15 @@ android {
         versionName = "1.8.3"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        val apiKey = System.getenv("YOUVERSION_API_KEY")
+            ?: (project.findProperty("YOUVERSION_API_KEY") as String?)
+            ?: "placeholder_youversion_api_key"
+        buildConfigField("String", "YOUVERSION_API_KEY", "\"$apiKey\"")
+    }
+
+    testOptions {
+        unitTests.isReturnDefaultValues = true
     }
 
     signingConfigs {
@@ -38,11 +47,12 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_11
+        targetCompatibility = JavaVersion.VERSION_11
     }
     buildFeatures {
         viewBinding = true
+        buildConfig = true
     }
 
     room {
@@ -52,6 +62,9 @@ android {
 
 dependencies {
     val room_version = "2.8.4"
+
+    implementation(platform("com.youversion.platform:platform-bom:2.7.0"))
+    implementation("com.youversion.platform:platform-core")
 
     implementation("androidx.core:core-ktx:1.12.0")
     implementation("androidx.appcompat:appcompat:1.6.1")
@@ -69,6 +82,14 @@ dependencies {
     ksp("androidx.room:room-compiler:$room_version")
 
     testImplementation("junit:junit:4.13.2")
+    testImplementation("org.mockito:mockito-core:5.11.0")
+    testImplementation("org.mockito.kotlin:mockito-kotlin:5.2.1")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
+}
+
+tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach {
+    compilerOptions {
+        jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_11)
+    }
 }
