@@ -1,4 +1,0 @@
-- Bibelvers-Quelle auf das YouVersion Platform SDK umgestellt.
-- Dynamische Auswahl von Sprachen und Bibelübersetzungen hinzugefügt.
-- Unterstützung für tägliche Vers-des-Tages-Bilder hinzugefügt.
-- Neues Vers-Bild Home-Screen-Widget hinzugefügt.

@@ -105,8 +105,12 @@ class TranslationSelectionViewModel(
             selectTranslation(foundVersion)
         } else {
             val idStr = versionId.toString()
+            val versionName = foundVersion?.title ?: "Version $versionId"
             _selectedTranslationId.value = idStr
-            sharedPreferences?.edit()?.putString(PREF_KEY_BIBLE_VERSION, idStr)?.apply()
+            sharedPreferences?.edit()
+                ?.putString(PREF_KEY_BIBLE_VERSION, idStr)
+                ?.putString(PREF_KEY_BIBLE_VERSION_NAME, versionName)
+                ?.apply()
         }
     }
 

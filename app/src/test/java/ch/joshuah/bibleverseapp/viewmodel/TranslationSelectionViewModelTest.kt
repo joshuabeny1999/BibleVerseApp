@@ -132,6 +132,7 @@ class TranslationSelectionViewModelTest {
 
         assertEquals("111", viewModel.selectedTranslationId.value)
         verify(sharedPreferencesEditor).putString(TranslationSelectionViewModel.PREF_KEY_BIBLE_VERSION, "111")
+        verify(sharedPreferencesEditor).putString(TranslationSelectionViewModel.PREF_KEY_BIBLE_VERSION_NAME, "Version 111")
         verify(sharedPreferencesEditor).apply()
     }
 
