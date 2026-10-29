@@ -25,12 +25,7 @@ class WidgetUpdateReceiver : BroadcastReceiver() {
         val hasImageWidgets = imageWidgetIds.isNotEmpty()
 
         if (hasTextWidgets || hasImageWidgets) {
-            if (hasTextWidgets) {
-                BibleVerseWidget.updateWidgets(context)
-            }
-            if (hasImageWidgets) {
-                BibleVerseImageWidget.updateWidgets(context)
-            }
+            WidgetUpdateScheduler.updateAllWidgets(context)
             Toast.makeText(context, "Bible Verse Widgets Updated", Toast.LENGTH_SHORT).show()
         } else {
             Toast.makeText(context, "No widgets to update", Toast.LENGTH_SHORT).show()
@@ -40,6 +35,11 @@ class WidgetUpdateReceiver : BroadcastReceiver() {
 
 // Scheduler to set up or cancel the AlarmManager
 object WidgetUpdateScheduler {
+    fun updateAllWidgets(context: Context) {
+        BibleVerseWidget.updateWidgets(context)
+        BibleVerseImageWidget.updateWidgets(context)
+    }
+
     fun setupWidgetUpdateAlarm(context: Context) {
         val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
         val intent = Intent(context, WidgetUpdateReceiver::class.java).apply {

@@ -15,8 +15,7 @@ import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import ch.joshuah.bibleverseapp.databinding.FragmentTranslationSelectionBinding
 import ch.joshuah.bibleverseapp.viewmodel.TranslationSelectionViewModel
-import ch.joshuah.bibleverseapp.widgets.BibleVerseImageWidget
-import ch.joshuah.bibleverseapp.widgets.BibleVerseWidget
+import ch.joshuah.bibleverseapp.widgets.WidgetUpdateScheduler
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import java.util.Locale
@@ -57,8 +56,7 @@ class TranslationSelectionFragment : Fragment() {
         adapter = TranslationAdapter { version ->
             viewModel.selectTranslation(version)
             context?.let { ctx ->
-                BibleVerseWidget.updateWidgets(ctx)
-                BibleVerseImageWidget.updateWidgets(ctx)
+                WidgetUpdateScheduler.updateAllWidgets(ctx)
             }
             parentFragmentManager.popBackStack()
         }

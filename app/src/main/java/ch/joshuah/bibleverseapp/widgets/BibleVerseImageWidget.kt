@@ -128,10 +128,12 @@ class BibleVerseImageWidget : AppWidgetProvider() {
                         views.setImageViewBitmap(R.id.widget_image_imageViewArtwork, bitmap)
                         views.setViewVisibility(R.id.widget_image_imageViewArtwork, View.VISIBLE)
                     } else {
-                        views.setViewVisibility(R.id.widget_image_imageViewArtwork, View.GONE)
+                        views.setImageViewResource(R.id.widget_image_imageViewArtwork, R.drawable.app_widget_background)
+                        views.setViewVisibility(R.id.widget_image_imageViewArtwork, View.VISIBLE)
                     }
                 } else {
-                    views.setViewVisibility(R.id.widget_image_imageViewArtwork, View.GONE)
+                    views.setImageViewResource(R.id.widget_image_imageViewArtwork, R.drawable.app_widget_background)
+                    views.setViewVisibility(R.id.widget_image_imageViewArtwork, View.VISIBLE)
                 }
 
                 val intent = Intent(context, MainActivity::class.java)
