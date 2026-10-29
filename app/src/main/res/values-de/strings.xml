@@ -13,7 +13,12 @@
     <string name="fragment_credit_textViewThanksText">Wir danken BibleGateway.com herzlich für ihre grosszügige Bereitstellung täglicher Verse und ihr unermüdliches Engagement für die Verbreitung des Wortes Gottes.</string>
     <string name="preference_category_bible_version_title">Bibelübersetzung</string>
     <string name="preference_listPreference_bible_version_title">Bibelübersetzung auswählen</string>
-    <string name="preference_listPreference_bible_version_default_value">LUTH1545</string>
+    <string name="preference_listPreference_bible_version_default_value">111</string>
+    <string name="preference_listPreference_bible_version_summary">Sprache und Übersetzung auswählen</string>
+    <string name="translation_selection_title">Bibelübersetzung auswählen</string>
+    <string name="translation_selection_language_label">Sprache:</string>
+    <string name="translation_selection_loading">Übersetzungen werden geladen…</string>
+    <string name="translation_selection_empty">Keine Übersetzungen für diese Sprache verfügbar.</string>
     <string name="preference_category_notifications_title">Benachrichtigungen</string>
     <string name="preference_switchPreference_enable_notifications_title">Tägliche Benachrichtigungen aktivieren</string>
     <string name="preference_switchPreference_enable_notifications_summary">Tägliche Bibelverse erhalten (Zeit kann zur Akkuoptimierung leicht variieren)</string>
