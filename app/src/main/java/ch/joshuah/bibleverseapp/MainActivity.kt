@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import ch.joshuah.bibleverseapp.fragments.CreditFragment
 import ch.joshuah.bibleverseapp.fragments.SettingFragment
 import ch.joshuah.bibleverseapp.fragments.VerseFragment
+import ch.joshuah.bibleverseapp.widgets.BibleVerseImageWidget
 import ch.joshuah.bibleverseapp.widgets.BibleVerseWidget
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
@@ -30,6 +31,7 @@ class MainActivity : AppCompatActivity() {
 
         if (intent.action == "ch.joshuah.bibleverseapp.UPDATE_WIDGETS") {
             BibleVerseWidget.updateWidgets(this)
+            BibleVerseImageWidget.updateWidgets(this)
         }
 
         if (savedInstanceState == null) {

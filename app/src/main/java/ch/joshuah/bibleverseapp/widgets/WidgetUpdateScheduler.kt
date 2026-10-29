@@ -14,13 +14,23 @@ import java.util.Calendar
 class WidgetUpdateReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
         val appWidgetManager = AppWidgetManager.getInstance(context)
-        val appWidgetIds = appWidgetManager.getAppWidgetIds(
+        val textWidgetIds = appWidgetManager.getAppWidgetIds(
             ComponentName(context, BibleVerseWidget::class.java)
         )
+        val imageWidgetIds = appWidgetManager.getAppWidgetIds(
+            ComponentName(context, BibleVerseImageWidget::class.java)
+        )
 
-        // Check if there are any widgets to update
-        if (appWidgetIds.isNotEmpty()) {
-            BibleVerseWidget.updateWidgets(context)
+        val hasTextWidgets = textWidgetIds.isNotEmpty()
+        val hasImageWidgets = imageWidgetIds.isNotEmpty()
+
+        if (hasTextWidgets || hasImageWidgets) {
+            if (hasTextWidgets) {
+                BibleVerseWidget.updateWidgets(context)
+            }
+            if (hasImageWidgets) {
+                BibleVerseImageWidget.updateWidgets(context)
+            }
             Toast.makeText(context, "Bible Verse Widgets Updated", Toast.LENGTH_SHORT).show()
         } else {
             Toast.makeText(context, "No widgets to update", Toast.LENGTH_SHORT).show()
