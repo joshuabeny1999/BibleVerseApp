@@ -6,6 +6,7 @@ import ch.joshuah.bibleverseapp.data.BibleVerse
 import com.youversion.platform.core.BibleDefaults
 import com.youversion.platform.core.api.YouVersionApi
 import com.youversion.platform.core.bibles.api.BiblesApi
+import com.youversion.platform.core.verseimages.api.VerseImagesApi
 import com.youversion.platform.core.votd.api.VotdApi
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.flow.Flow
@@ -15,6 +16,7 @@ import java.util.Date
 class BibleVerseApiService(
     private val votdApi: VotdApi = YouVersionApi.votd,
     private val biblesApi: BiblesApi = YouVersionApi.bible,
+    private val verseImagesApi: VerseImagesApi = YouVersionApi.verseImages,
     private val uriParser: (String) -> Uri = { url ->
         try {
             Uri.parse(url) ?: Uri.EMPTY
@@ -47,6 +49,14 @@ class BibleVerseApiService(
                 null
             }
 
+            val verseImage = try {
+                verseImagesApi.verseImage(votd.passageUsfm)
+            } catch (e: CancellationException) {
+                throw e
+            } catch (e: Exception) {
+                null
+            }
+
             val cleanText = stripHtml(passage.content)
             val reference = passage.reference.ifBlank { votd.passageUsfm }
             val versionStr = versionId.toString()
@@ -60,7 +70,9 @@ class BibleVerseApiService(
                 version = versionStr,
                 versionLong = versionLong,
                 link = linkUri,
-                date = Date()
+                date = Date(),
+                imageUrl = verseImage?.imageUrl,
+                attribution = verseImage?.attribution
             )
 
             emit(Result.success(bibleVerse))

@@ -18,7 +18,7 @@ class BibleVerseRepository(context: Context) {
         val database = Room.databaseBuilder(
             context,
             AppDatabase::class.java, "bible_verse_app.db"
-        ).build()
+        ).fallbackToDestructiveMigration(true).build()
         bibleVerseDao = database.bibleVerseDao()
     }
 

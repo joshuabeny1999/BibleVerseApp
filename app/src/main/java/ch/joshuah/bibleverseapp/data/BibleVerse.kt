@@ -14,5 +14,7 @@ data class BibleVerse(
     @ColumnInfo(name = "version_long") val versionLong: String,
     @ColumnInfo(name = "link") val link: Uri,
     @ColumnInfo(name = "date") val date: Date,
+    @ColumnInfo(name = "image_url") val imageUrl: String? = null,
+    @ColumnInfo(name = "attribution") val attribution: String? = null,
     @PrimaryKey(autoGenerate = true) val uid: Int = 0
-    )
+)
