@@ -1,6 +1,20 @@
 default_platform(:android)
 
 platform :android do
+
+  desc "Build release APK and AAB locally (no version bump, no upload)"
+  lane :build do
+    gradle(
+      tasks: ["clean", "assembleRelease", "bundleRelease"],
+      properties: {
+        "KEYSTORE_FILE" => "/Users/joshua/Documents/android_keystore.jks",
+        "KEYSTORE_PASSWORD" => ENV["KEYSTORE_PASSWORD"],
+        "KEY_ALIAS" => "bibleverseappkey",
+        "KEY_PASSWORD" => ENV["KEY_PASSWORD"]
+      }
+    )
+  end
+
   desc "Update version in gradle, Build and deploy to Google Play Store"
   lane :deploy do
     # 1. Automatically increment the versionCode
@@ -24,17 +38,8 @@ platform :android do
       version_name: new_version
     )
 
-    # 3. Build the release App Bundle (.aab)
-    gradle(
-      task: "bundle",
-      build_type: "Release",
-      properties: {
-        "KEYSTORE_FILE" => "/Users/joshua/Documents/android_keystore.jks",
-        "KEYSTORE_PASSWORD" => ENV["KEYSTORE_PASSWORD"],
-        "KEY_ALIAS" => "bibleverseappkey",
-        "KEY_PASSWORD" => ENV["KEY_PASSWORD"]
-      }
-    )
+    # 3. Call the build lane to generate both files
+    build
 
     # 4. Upload to Play Store
     upload_to_play_store(
@@ -43,4 +48,5 @@ platform :android do
       skip_upload_apk: true
     )
   end
+
 end
